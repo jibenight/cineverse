@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 ruby "3.4.8"
 
-gem "rails", "~> 7.2.0"
+gem "rails", "~> 8.1.0"
 gem "pg", "~> 1.5"
 gem "puma", "~> 6.0"
 gem "sprockets-rails"
@@ -15,8 +15,8 @@ gem "bootsnap", require: false
 gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Auth & Authorization
-gem "devise", "~> 4.9"
-gem "devise-two-factor", "~> 5.0"
+gem "devise", "~> 5.0"
+gem "devise-two-factor", "~> 6.4"
 gem "pundit", "~> 2.3"
 
 # Background Jobs
@@ -47,9 +47,6 @@ gem "meta-tags", "~> 2.22"
 gem "image_processing", "~> 1.13"
 gem "aws-sdk-s3", require: false
 
-# Rich Text
-gem "actiontext"
-
 # HTTP Client (for TMDb API)
 gem "httparty", "~> 0.22"
 
@@ -70,7 +67,7 @@ end
 group :development do
   gem "web-console"
   gem "letter_opener", "~> 1.10"
-  gem "annotate", "~> 3.2"
+  gem "annotaterb"
 end
 
 group :test do
