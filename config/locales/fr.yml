@@ -39,6 +39,8 @@ fr:
         label: "Intitulé"
         description: "Description"
     errors:
+      messages:
+        record_invalid: "La validation a échoué : %{errors}"
       models:
         user:
           attributes:

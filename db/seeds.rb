@@ -3,8 +3,8 @@ puts "Seeding CinéVerse database..."
 # Create admin user
 admin = User.find_or_create_by!(email: "admin@cineverse.fr") do |u|
   u.username = "admin"
-  u.password = "password123"
-  u.password_confirmation = "password123"
+  u.password = "password123456"
+  u.password_confirmation = "password123456"
   u.role = :admin
   u.theme_preference = :dark
   u.city = "Paris"
@@ -18,8 +18,8 @@ users = []
 10.times do |i|
   user = User.find_or_create_by!(email: "user#{i + 1}@cineverse.fr") do |u|
     u.username = "cinephile#{i + 1}"
-    u.password = "password123"
-    u.password_confirmation = "password123"
+    u.password = "password123456"
+    u.password_confirmation = "password123456"
     u.role = i == 0 ? :premium : :user
     u.theme_preference = %i[dark light].sample
     u.city = %w[Paris Lyon Marseille Bordeaux Toulouse Lille Nantes Strasbourg Montpellier Nice].sample
