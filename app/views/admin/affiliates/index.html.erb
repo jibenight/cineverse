@@ -1,0 +1,87 @@
+<% content_for(:title) { "Affiliation" } %>
+<% content_for(:page_title) { "Affiliation" } %>
+
+<!-- Period Filter -->
+<div class="flex items-center gap-2 mb-6">
+  <% %w[7d 30d 90d 12m].each do |period| %>
+    <%= link_to period, admin_affiliates_path(period: period),
+        class: "px-3 py-1.5 rounded-lg text-xs font-medium transition #{@period == period ? 'bg-amber-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}" %>
+  <% end %>
+  <%= link_to "Exporter CSV", export_csv_admin_affiliates_path, class: "ml-auto px-3 py-1.5 rounded-lg text-xs font-medium bg-neutral-800 text-neutral-400 hover:bg-neutral-700 transition" %>
+</div>
+
+<!-- KPIs -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+  <div class="bg-[#1A1A1A] rounded-lg border border-neutral-800 p-5">
+    <p class="text-xs text-neutral-400 uppercase tracking-wider">Total clics</p>
+    <p class="text-2xl font-bold mt-1"><%= @clicks_by_provider.values.sum %></p>
+  </div>
+  <div class="bg-[#1A1A1A] rounded-lg border border-neutral-800 p-5">
+    <p class="text-xs text-neutral-400 uppercase tracking-wider">Fournisseurs actifs</p>
+    <p class="text-2xl font-bold mt-1"><%= @clicks_by_provider.keys.count %></p>
+  </div>
+  <div class="bg-[#1A1A1A] rounded-lg border border-neutral-800 p-5">
+    <p class="text-xs text-neutral-400 uppercase tracking-wider">Revenus estimés</p>
+    <p class="text-2xl font-bold mt-1 text-amber-500"><%= number_to_currency(@estimated_revenue, unit: "€", format: "%n %u") %></p>
+  </div>
+</div>
+
+<!-- Clicks by Provider -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+  <div class="bg-[#1A1A1A] rounded-lg border border-neutral-800 p-5">
+    <h3 class="text-sm font-semibold mb-4">Clics par fournisseur</h3>
+    <% if @clicks_by_provider.any? %>
+      <div class="space-y-3">
+        <% @clicks_by_provider.sort_by { |_, v| -v }.each do |provider, count| %>
+          <div class="flex items-center justify-between">
+            <span class="text-sm"><%= provider.capitalize %></span>
+            <span class="text-sm font-medium text-amber-500"><%= count %></span>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-sm text-neutral-500">Aucun clic sur cette période.</p>
+    <% end %>
+  </div>
+
+  <div class="bg-[#1A1A1A] rounded-lg border border-neutral-800 p-5">
+    <h3 class="text-sm font-semibold mb-4">Clics par jour</h3>
+    <% if @clicks_by_day.any? %>
+      <%= line_chart @clicks_by_day, colors: ["#F59E0B"], library: { backgroundColor: "transparent" } %>
+    <% else %>
+      <p class="text-sm text-neutral-500">Aucune donnée sur cette période.</p>
+    <% end %>
+  </div>
+</div>
+
+<!-- Recent Clicks -->
+<div class="bg-[#1A1A1A] rounded-lg border border-neutral-800 overflow-hidden">
+  <div class="px-4 py-3 border-b border-neutral-800">
+    <h3 class="text-sm font-semibold">Derniers clics</h3>
+  </div>
+  <table class="w-full">
+    <thead>
+      <tr class="border-b border-neutral-800 text-left">
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Utilisateur</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Film</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Fournisseur</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Date</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-neutral-800">
+      <% @recent_clicks.each do |click| %>
+        <tr class="hover:bg-neutral-800/50 transition">
+          <td class="px-4 py-3 text-sm"><%= click.user&.username || "Anonyme" %></td>
+          <td class="px-4 py-3 text-sm"><%= click.movie&.title || "—" %></td>
+          <td class="px-4 py-3 text-sm"><%= click.provider.capitalize %></td>
+          <td class="px-4 py-3 text-sm text-neutral-400"><%= l(click.clicked_at, format: :long) %></td>
+        </tr>
+      <% end %>
+      <% if @recent_clicks.empty? %>
+        <tr>
+          <td colspan="4" class="px-4 py-8 text-center text-sm text-neutral-500">Aucun clic enregistré.</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
