@@ -21,7 +21,7 @@ gem "pundit", "~> 2.3"
 
 # Background Jobs
 gem "sidekiq", "~> 7.2"
-gem "sidekiq-cron", "~> 1.12"
+gem "sidekiq-cron", "~> 2.3"
 
 # Pagination
 gem "pagy", "~> 9.0"
