@@ -1,6 +1,8 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-if gem list --no-installed --exact --silent foreman; then
+eval "$(rbenv init -)"
+
+if ! gem list --no-installed --exact --silent foreman; then
   echo "Installing foreman..."
   gem install foreman
 fi
