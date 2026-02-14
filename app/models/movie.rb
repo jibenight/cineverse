@@ -24,7 +24,4 @@ class Movie < ApplicationRecord
     ratings.average(:score)&.round(1)
   end
 
-  def community_ratings_count
-    ratings_count
-  end
 end

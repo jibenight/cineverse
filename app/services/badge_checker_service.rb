@@ -19,12 +19,19 @@ class BadgeCheckerService
 
   def check_all
     newly_earned = []
+    existing_badge_ids = @user.user_badges.pluck(:badge_id)
 
     Badge.find_each do |badge|
-      next if @user.badges.include?(badge)
+      next if existing_badge_ids.include?(badge.id)
       if earned?(badge)
-        @user.user_badges.create!(badge: badge, earned_at: Time.current)
-        newly_earned << badge
+        begin
+          user_badge = @user.user_badges.find_or_create_by(badge: badge) do |ub|
+            ub.earned_at = Time.current
+          end
+          newly_earned << badge if user_badge.previously_new_record?
+        rescue ActiveRecord::RecordNotUnique
+          # Another process already created this badge, skip
+        end
       end
     end
 

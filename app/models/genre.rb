@@ -3,5 +3,5 @@ class Genre < ApplicationRecord
   has_many :movies, through: :movie_genres
 
   validates :name, presence: true
-  validates :tmdb_id, uniqueness: true
+  validates :tmdb_id, presence: true, uniqueness: true
 end

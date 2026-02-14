@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   after_action :verify_authorized, only: [:follow, :unfollow]
 
   def show
-    @user = User.find_by!(username: params[:username])
+    @user = User.includes(:badges, :cinema_passes, :user_discounts, ratings: :movie).find_by!(username: params[:username])
     @ratings = @user.ratings.includes(:movie).recent.limit(10)
     @badges = @user.badges
     @cinema_passes = @user.cinema_passes.visible

@@ -10,7 +10,8 @@ module Newsletter
         stat = event.campaign.newsletter_campaign_stat
         stat&.increment!(:total_clicked)
       end
-      redirect_to params[:url], allow_other_host: true, status: 302
+      target_url = event&.target_url || root_url
+      redirect_to target_url, allow_other_host: true, status: 302
     end
 
     def open

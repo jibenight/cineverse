@@ -25,4 +25,19 @@ class Rack::Attack
       req.env["warden"]&.user&.id || req.ip
     end
   end
+
+  # Rate limit contact form
+  throttle("contact/ip", limit: 3, period: 1.hour) do |req|
+    req.ip if req.path == "/contact" && req.post?
+  end
+
+  # Rate limit report creation
+  throttle("reports/ip", limit: 10, period: 1.hour) do |req|
+    req.ip if req.path == "/reports" && req.post?
+  end
+
+  # Rate limit newsletter token endpoints (confirm & unsubscribe)
+  throttle("newsletter_tokens/ip", limit: 10, period: 60.seconds) do |req|
+    req.ip if req.path.start_with?("/newsletter/confirm/") || req.path.start_with?("/newsletter/unsubscribe/")
+  end
 end

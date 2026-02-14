@@ -43,20 +43,40 @@ module Admin
         send_data csv_data, filename: "newsletter_subscribers_#{Date.current}.csv", type: "text/csv"
       end
 
+      MAX_IMPORT_FILE_SIZE = 5.megabytes
+      MAX_IMPORT_ROWS = 10_000
+
       def import_csv
         file = params[:file]
-        if file
+        unless file
+          return redirect_to admin_newsletter_subscribers_path, alert: "Aucun fichier sélectionné."
+        end
+
+        if file.size > MAX_IMPORT_FILE_SIZE
+          return redirect_to admin_newsletter_subscribers_path, alert: "Le fichier dépasse la taille maximale de 5 Mo."
+        end
+
+        row_count = 0
+        ActiveRecord::Base.transaction do
           CSV.foreach(file.path, headers: true) do |row|
+            row_count += 1
+            if row_count > MAX_IMPORT_ROWS
+              raise ActiveRecord::Rollback, "Trop de lignes (max #{MAX_IMPORT_ROWS})"
+            end
+
             ::NewsletterSubscriber.find_or_create_by(email: row["email"]) do |sub|
               sub.first_name = row["first_name"]
               sub.source = :import
               sub.status = :pending
             end
           end
-          audit_log!(action: "imported_subscribers", metadata: { filename: file.original_filename })
-          redirect_to admin_newsletter_subscribers_path, notice: "Import terminé."
+        end
+
+        if row_count > MAX_IMPORT_ROWS
+          redirect_to admin_newsletter_subscribers_path, alert: "Le fichier dépasse le maximum de #{MAX_IMPORT_ROWS} lignes."
         else
-          redirect_to admin_newsletter_subscribers_path, alert: "Aucun fichier sélectionné."
+          audit_log!(action: "imported_subscribers", metadata: { filename: file.original_filename, row_count: row_count })
+          redirect_to admin_newsletter_subscribers_path, notice: "Import terminé (#{row_count} lignes traitées)."
         end
       end
     end

@@ -57,11 +57,4 @@ RSpec.describe Movie, type: :model do
     end
   end
 
-  describe "#community_ratings_count" do
-    let(:movie) { create(:movie, ratings_count: 42) }
-
-    it "returns the ratings_count column" do
-      expect(movie.community_ratings_count).to eq(42)
-    end
-  end
 end

@@ -3,6 +3,12 @@ class MessagesController < ApplicationController
 
   def create
     @conversation = Conversation.find(params[:conversation_id])
+
+    unless @conversation.participant?(current_user)
+      redirect_to conversations_path, alert: "Vous n'avez pas accès à cette conversation."
+      return
+    end
+
     @message = @conversation.messages.build(message_params.merge(user: current_user))
     authorize @message
 

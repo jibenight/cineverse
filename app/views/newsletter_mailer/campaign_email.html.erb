@@ -1,4 +1,4 @@
-<%= raw @campaign.body_html %>
+<%= sanitize(@campaign.body_html, tags: %w[h1 h2 h3 h4 h5 h6 p a img ul ol li br em strong b i u span div table tr td th thead tbody blockquote hr], attributes: %w[href src alt class style target width height]) %>
 <hr>
 <p style="font-size:12px;color:#999;">
   Vous recevez cet email car vous êtes inscrit à la newsletter CinéVerse.<br>

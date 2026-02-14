@@ -12,7 +12,7 @@
         <% if @message.shared_movie %>
           <a href="<%= movie_path(@message.shared_movie) %>" class="block rounded-lg overflow-hidden bg-white/10 hover:bg-white/20 transition">
             <div class="flex gap-2 p-2">
-              <img src="https://image.tmdb.org/t/p/w92<%= @message.shared_movie.poster_path %>" class="w-12 rounded" alt="">
+              <img src="https://image.tmdb.org/t/p/w92<%= @message.shared_movie.poster_path %>" class="w-12 rounded" alt="<%= @message.shared_movie&.title %>">
               <div>
                 <p class="font-semibold text-sm"><%= @message.shared_movie.title %></p>
                 <p class="text-xs opacity-75"><%= @message.shared_movie.vote_average&.round(1) %>/5</p>

@@ -11,41 +11,59 @@ module Admin
 
     def show
       @user = User.find(params[:id])
+      @recent_ratings = @user.ratings.includes(:movie).order(created_at: :desc).limit(10)
+      @reports = Report.includes(:reporter).where(reportable: @user.ratings).or(Report.includes(:reporter).where(reportable: @user.messages)).order(created_at: :desc)
+      @audit_logs = AdminAuditLog.where(target_type: "User", target_id: @user.id).order(created_at: :desc).limit(20)
     end
 
     def ban
       @user = User.find(params[:id])
-      @user.update!(banned_at: Time.current, ban_reason: params[:reason])
-      audit_log!(action: "banned_user", target: @user, metadata: { reason: params[:reason] })
-      redirect_to admin_user_path(@user), notice: "Utilisateur banni."
+      result = admin_user_service(@user).ban(reason: params[:reason])
+      if result.success?
+        redirect_to admin_user_path(@user), notice: "Utilisateur banni."
+      else
+        redirect_to admin_user_path(@user), alert: result.error
+      end
     end
 
     def unban
       @user = User.find(params[:id])
-      @user.update!(banned_at: nil, ban_reason: nil)
-      audit_log!(action: "unbanned_user", target: @user)
-      redirect_to admin_user_path(@user), notice: "Utilisateur débanni."
+      result = admin_user_service(@user).unban
+      if result.success?
+        redirect_to admin_user_path(@user), notice: "Utilisateur débanni."
+      else
+        redirect_to admin_user_path(@user), alert: result.error
+      end
     end
 
     def promote_admin
       @user = User.find(params[:id])
-      @user.update!(role: :admin)
-      audit_log!(action: "promoted_admin", target: @user)
-      redirect_to admin_user_path(@user), notice: "Utilisateur promu admin."
+      result = admin_user_service(@user).promote_admin
+      if result.success?
+        redirect_to admin_user_path(@user), notice: "Utilisateur promu admin."
+      else
+        redirect_to admin_user_path(@user), alert: result.error
+      end
     end
 
     def promote_premium
       @user = User.find(params[:id])
-      @user.update!(role: :premium)
-      audit_log!(action: "promoted_premium", target: @user)
-      redirect_to admin_user_path(@user), notice: "Utilisateur passé premium."
+      result = admin_user_service(@user).promote_premium
+      if result.success?
+        redirect_to admin_user_path(@user), notice: "Utilisateur passé premium."
+      else
+        redirect_to admin_user_path(@user), alert: result.error
+      end
     end
 
     def remove_premium
       @user = User.find(params[:id])
-      @user.update!(role: :user)
-      audit_log!(action: "removed_premium", target: @user)
-      redirect_to admin_user_path(@user), notice: "Premium retiré."
+      result = admin_user_service(@user).remove_premium
+      if result.success?
+        redirect_to admin_user_path(@user), notice: "Premium retiré."
+      else
+        redirect_to admin_user_path(@user), alert: result.error
+      end
     end
 
     def delete_account
@@ -65,6 +83,12 @@ module Admin
       end
 
       send_data csv_data, filename: "users_#{Date.current}.csv", type: "text/csv"
+    end
+
+    private
+
+    def admin_user_service(user)
+      AdminUserService.new(admin: current_user, user: user)
     end
   end
 end

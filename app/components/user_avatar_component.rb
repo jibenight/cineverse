@@ -16,13 +16,22 @@ class UserAvatarComponent < ViewComponent::Base
   end
 
   def avatar_url
+    return fallback_avatar_url unless @user&.username.present?
+
     if @user.avatar.attached?
       url_for(@user.avatar.variant(resize_to_fill: [200, 200]))
     else
-      "https://ui-avatars.com/api/?name=#{CGI.escape(@user.username)}&background=F59E0B&color=fff&size=200"
+      fallback_avatar_url
     end
   rescue StandardError
-    "https://ui-avatars.com/api/?name=#{CGI.escape(@user.username)}&background=F59E0B&color=fff&size=200"
+    fallback_avatar_url
+  end
+
+  private
+
+  def fallback_avatar_url
+    name = @user&.username.presence || "U"
+    "https://ui-avatars.com/api/?name=#{CGI.escape(name)}&background=F59E0B&color=fff&size=200"
   end
 
   def online_indicator_class

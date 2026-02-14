@@ -5,7 +5,7 @@ class HomeController < ApplicationController
   def index
     @now_playing = Movie.now_playing.order(popularity: :desc).limit(12)
     @upcoming = Movie.upcoming.limit(6)
-    @trending = Movie.joins(:ratings)
+    @trending = Movie.includes(:genres).joins(:ratings)
       .where(ratings: { created_at: 1.week.ago.. })
       .group("movies.id")
       .order("COUNT(ratings.id) DESC")

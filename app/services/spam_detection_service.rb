@@ -37,11 +37,12 @@ class SpamDetectionService
   end
 
   def excessive_links?
-    recent_messages = @user.messages
+    recent_bodies = @user.messages
       .where(conversation: @conversation)
       .where("created_at > ?", LINK_WINDOW.ago)
+      .pluck(:body)
 
-    link_count = recent_messages.sum { |m| m.body.to_s.scan(%r{https?://}).count }
+    link_count = recent_bodies.sum { |body| body.to_s.scan(%r{https?://}).count }
     link_count >= LINK_THRESHOLD
   end
 end

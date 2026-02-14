@@ -1,11 +1,18 @@
 class NewsletterSendService
   def initialize(campaign)
     @campaign = campaign
-    @config = YAML.load_file(Rails.root.join("config", "newsletter.yml"))
+    @config = YAML.safe_load_file(Rails.root.join("config", "newsletter.yml"))
   end
 
   def send_campaign
-    @campaign.update!(status: :sending)
+    return unless @campaign.status.to_s.in?(%w[draft scheduled])
+
+    # Atomically transition from draft/scheduled to sending; bail if another caller already did
+    rows_updated = NewsletterCampaign.where(id: @campaign.id, status: [:draft, :scheduled])
+                                     .update_all(status: :sending)
+    return if rows_updated.zero?
+
+    @campaign.reload
     subscribers = target_subscribers
 
     subscribers.find_in_batches(batch_size: @config["batch_size"]) do |batch|

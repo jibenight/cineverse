@@ -2,8 +2,8 @@ FactoryBot.define do
   factory :user do
     sequence(:email) { |n| "user#{n}@cineverse.fr" }
     sequence(:username) { |n| "cinephile#{n}" }
-    password { "password123" }
-    password_confirmation { "password123" }
+    password { "password1234" }
+    password_confirmation { "password1234" }
     role { :user }
     theme_preference { :dark }
     city { "Paris" }

@@ -6,7 +6,7 @@ class Message < ApplicationRecord
 
   enum :message_type, { text: 0, movie_share: 1, discount_share: 2, cinema_invite: 3 }
 
-  validates :body, presence: true, if: -> { text? }
+  validates :body, presence: true, if: -> { text? || discount_share? || cinema_invite? }
   validates :shared_movie_id, presence: true, if: -> { movie_share? }
 
   scope :recent, -> { order(created_at: :desc) }
@@ -25,7 +25,7 @@ class Message < ApplicationRecord
         locals: { message: self }
       )
     })
-  rescue StandardError
-    # Silently fail if ActionCable is not available
+  rescue StandardError => e
+    Rails.logger.error("Message broadcast failed for message ##{id}: #{e.message}")
   end
 end

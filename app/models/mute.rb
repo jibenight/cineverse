@@ -19,11 +19,14 @@ class Mute < ApplicationRecord
   private
 
   def set_expires_at
-    self.expires_at = case duration
-    when "one_hour" then 1.hour.from_now
-    when "twenty_four_hours" then 24.hours.from_now
-    when "seven_days" then 7.days.from_now
-    when "permanent" then nil
+    self.expires_at = if one_hour?
+      1.hour.from_now
+    elsif twenty_four_hours?
+      24.hours.from_now
+    elsif seven_days?
+      7.days.from_now
+    elsif permanent?
+      nil
     end
   end
 end

@@ -6,7 +6,8 @@
     <span class="text-sm text-neutral-400"><%= number_with_delimiter(@total_count) %> utilisateurs</span>
     <!-- Search -->
     <%= form_with url: admin_users_path, method: :get, class: "relative" do %>
-      <input type="text" name="q" value="<%= params[:q] %>" placeholder="Rechercher un utilisateur..."
+      <label for="admin_user_search" class="sr-only">Rechercher un utilisateur</label>
+      <input type="text" name="q" id="admin_user_search" value="<%= params[:q] %>" placeholder="Rechercher un utilisateur..."
              class="pl-9 pr-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent w-64">
       <svg class="absolute left-3 top-2.5 w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
     <% end %>

@@ -1,6 +1,6 @@
 class AffiliateLinksService
   def initialize
-    @config = YAML.load_file(Rails.root.join("config", "affiliates.yml"))["providers"]
+    @config = YAML.safe_load_file(Rails.root.join("config", "affiliates.yml"))["providers"]
   end
 
   def links_for(movie, user: nil)

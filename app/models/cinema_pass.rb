@@ -10,7 +10,7 @@ class CinemaPass < ApplicationRecord
   }
   enum :pass_type, { solo: 0, duo: 1, famille: 2 }
 
-  validates :provider, presence: true
+  validates :provider, presence: true, uniqueness: { scope: [:user_id, :pass_type] }
   validates :pass_type, presence: true
   validates :provider_custom_name, presence: true, if: -> { other? }
 

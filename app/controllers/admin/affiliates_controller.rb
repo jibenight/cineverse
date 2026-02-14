@@ -8,7 +8,7 @@ module Admin
       @clicks_by_day = AffiliateClick.where("clicked_at >= ?", @start_date).group_by_day(:clicked_at).count
       @recent_clicks = AffiliateClick.includes(:user, :movie).order(clicked_at: :desc).limit(50)
 
-      config = YAML.load_file(Rails.root.join("config", "affiliates.yml"))["providers"]
+      config = YAML.safe_load_file(Rails.root.join("config", "affiliates.yml"))["providers"]
       @estimated_revenue = @clicks_by_provider.sum { |provider, count| count * (config.dig(provider, "estimated_cpc") || 0.25) }
     end
 

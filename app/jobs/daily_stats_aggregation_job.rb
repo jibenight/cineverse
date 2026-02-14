@@ -20,7 +20,7 @@ class DailyStatsAggregationJob < ApplicationJob
   private
 
   def calculate_affiliate_revenue(date)
-    config = YAML.load_file(Rails.root.join("config", "affiliates.yml"))["providers"]
+    config = YAML.safe_load_file(Rails.root.join("config", "affiliates.yml"))["providers"]
     AffiliateClick.where(clicked_at: date.all_day).group(:provider).count.sum do |provider, count|
       cpc = config.dig(provider, "estimated_cpc") || 0.25
       count * cpc

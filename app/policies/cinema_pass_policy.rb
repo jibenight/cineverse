@@ -1,10 +1,10 @@
 class CinemaPassPolicy < ApplicationPolicy
   def create?
-    user.present?
+    user.present? && !user.banned?
   end
 
   def update?
-    owner?
+    owner? && !user.banned?
   end
 
   def destroy?

@@ -11,6 +11,13 @@ class WatchlistItem < ApplicationRecord
   private
 
   def set_position
-    self.position ||= (user.watchlist_items.maximum(:position) || 0) + 1
+    self.position ||= begin
+      lock_key = "watchlist_position_#{user_id}".hash.abs
+      self.class.connection.execute(
+        self.class.sanitize_sql_array(["SELECT pg_advisory_xact_lock(?)", lock_key])
+      )
+      max_pos = self.class.where(user_id: user_id).maximum(:position) || 0
+      max_pos + 1
+    end
   end
 end
