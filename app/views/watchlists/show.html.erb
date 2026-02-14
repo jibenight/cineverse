@@ -1,0 +1,31 @@
+<% content_for(:title) { t("nav.watchlist") } %>
+<div class="max-w-7xl mx-auto px-6 py-8">
+  <h1 class="text-2xl font-bold mb-6"><%= t("nav.watchlist") %></h1>
+
+  <% if @watchlist_items.any? %>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <% @watchlist_items.each do |item| %>
+        <div class="relative group">
+          <%= render MovieCardComponent.new(movie: item.movie) %>
+          <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition">
+            <%= button_to toggle_watchlist_movie_path(item.movie), method: :post, class: "p-1.5 rounded-full bg-red-500 hover:bg-red-600 text-white shadow-lg" do %>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            <% end %>
+          </div>
+          <% if item.movie.release_date && item.movie.release_date > Date.current %>
+            <div class="absolute top-2 left-2">
+              <span class="px-2 py-0.5 rounded-full bg-amber-500 text-white text-xs font-medium">A venir</span>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <div class="mt-8"><%== pagy_nav(@pagy) if @pagy.pages > 1 %></div>
+  <% else %>
+    <div class="text-center py-16">
+      <svg class="w-16 h-16 mx-auto text-neutral-300 dark:text-neutral-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+      <p class="text-neutral-400 text-sm mb-4">Votre watchlist est vide.</p>
+      <%= link_to "Decouvrir des films", now_playing_path, class: "inline-block px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition" %>
+    </div>
+  <% end %>
+</div>

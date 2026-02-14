@@ -1,0 +1,16 @@
+<div class="flex items-center gap-4 text-xs text-neutral-400">
+  <% if user_signed_in? && rating.user != current_user %>
+    <% if current_user.rating_likes.exists?(rating: rating) %>
+      <%= button_to unlike_movie_rating_path(rating.movie, rating), method: :delete, class: "flex items-center gap-1 text-amber-500 hover:text-amber-600" do %>
+        ❤️ <%= rating.likes_count %>
+      <% end %>
+    <% else %>
+      <%= button_to like_movie_rating_path(rating.movie, rating), method: :post, class: "flex items-center gap-1 hover:text-amber-500" do %>
+        🤍 <%= rating.likes_count %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <span>❤️ <%= rating.likes_count %></span>
+  <% end %>
+  <span><%= time_ago_in_words(rating.created_at) %></span>
+</div>

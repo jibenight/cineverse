@@ -1,0 +1,8 @@
+<h1>Bienvenue sur CinéVerse !</h1>
+<p>Bonjour <%= @subscriber.first_name || "cinéphile" %>,</p>
+<p>Merci de confirmer votre inscription à la newsletter CinéVerse.</p>
+<p><a href="<%= @confirm_url %>" style="display:inline-block;padding:12px 24px;background:#F59E0B;color:white;text-decoration:none;border-radius:8px;font-weight:bold;">Confirmer mon inscription</a></p>
+<p>Ce lien expire dans 48h.</p>
+<hr>
+<p style="font-size:12px;color:#999;">CinéVerse — La communauté des passionnés de cinéma<br>
+<a href="<%= root_url %>">cineverse.fr</a></p>

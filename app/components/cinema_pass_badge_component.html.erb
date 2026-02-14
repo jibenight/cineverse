@@ -1,0 +1,4 @@
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium text-white <%= type_color %>"
+      title="<%= display_name %> (<%= type_label %>)<%= @cinema_pass.expiration_date ? " - Expire le #{l(@cinema_pass.expiration_date, format: :default)}" : '' %>">
+  🎬 <%= display_name %> (<%= type_label %>)
+</span>

@@ -1,0 +1,36 @@
+providers:
+  pathe_gaumont:
+    name: "Pathé Gaumont"
+    base_url: "https://www.pathe.fr/films/"
+    logo: "pathe_logo.svg"
+    affiliate_param: "ref=cineverse"
+    commission_type: "cpc"
+    estimated_cpc: 0.30
+  ugc:
+    name: "UGC"
+    base_url: "https://www.ugc.fr/film/"
+    logo: "ugc_logo.svg"
+    affiliate_param: "partner=cineverse"
+    commission_type: "cpc"
+    estimated_cpc: 0.30
+  mk2:
+    name: "MK2"
+    base_url: "https://www.mk2.com/films/"
+    logo: "mk2_logo.svg"
+    affiliate_param: "ref=cineverse"
+    commission_type: "cpc"
+    estimated_cpc: 0.25
+  cgr:
+    name: "CGR Cinémas"
+    base_url: "https://www.cgrcinemas.fr/films/"
+    logo: "cgr_logo.svg"
+    affiliate_param: "aff=cineverse"
+    commission_type: "cpc"
+    estimated_cpc: 0.20
+  kinepolis:
+    name: "Kinepolis"
+    base_url: "https://kinepolis.fr/films/"
+    logo: "kinepolis_logo.svg"
+    affiliate_param: "partner=cineverse"
+    commission_type: "cpc"
+    estimated_cpc: 0.25

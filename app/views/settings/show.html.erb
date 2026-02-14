@@ -1,0 +1,64 @@
+<% content_for(:title) { t("nav.settings") } %>
+<div class="max-w-3xl mx-auto px-6 py-8">
+  <h1 class="text-2xl font-bold mb-6"><%= t("nav.settings") %></h1>
+
+  <div class="space-y-8">
+    <!-- Profile Settings -->
+    <section class="bg-white dark:bg-[#1A1A1A] rounded-lg p-6 shadow-sm">
+      <h2 class="text-lg font-bold mb-4">Profil</h2>
+      <%= form_with model: current_user, url: settings_path, method: :patch, class: "space-y-4" do |f| %>
+        <div>
+          <label class="text-sm font-medium block mb-1">Nom d'utilisateur</label>
+          <%= f.text_field :username, class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
+        </div>
+        <div>
+          <label class="text-sm font-medium block mb-1">Bio</label>
+          <%= f.text_area :bio, rows: 3, class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
+        </div>
+        <div>
+          <label class="text-sm font-medium block mb-1">Avatar</label>
+          <%= f.file_field :avatar, class: "text-sm" %>
+        </div>
+        <%= f.submit "Enregistrer", class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition cursor-pointer" %>
+      <% end %>
+    </section>
+
+    <!-- Appearance -->
+    <section class="bg-white dark:bg-[#1A1A1A] rounded-lg p-6 shadow-sm">
+      <h2 class="text-lg font-bold mb-4">Apparence</h2>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium">Mode sombre</p>
+          <p class="text-xs text-neutral-400">Utiliser le theme sombre pour l'interface</p>
+        </div>
+        <%= form_with url: toggle_dark_mode_settings_path, method: :patch, class: "inline" do %>
+          <button type="submit" class="relative inline-flex h-6 w-11 items-center rounded-full transition <%= current_user.dark? ? 'bg-amber-500' : 'bg-neutral-300 dark:bg-neutral-600' %>">
+            <span class="inline-block h-4 w-4 transform rounded-full bg-white transition <%= current_user.dark? ? 'translate-x-6' : 'translate-x-1' %>"></span>
+          </button>
+        <% end %>
+      </div>
+    </section>
+
+    <!-- Notification Preferences -->
+    <section class="bg-white dark:bg-[#1A1A1A] rounded-lg p-6 shadow-sm">
+      <h2 class="text-lg font-bold mb-4">Notifications</h2>
+      <%= form_with url: notification_preferences_settings_path, method: :patch, class: "space-y-3" do |f| %>
+        <div class="flex items-center justify-between">
+          <span class="text-sm">Notifications par email</span>
+          <input type="checkbox" name="email_notifications" <%= 'checked' if current_user.email_notifications? %> class="rounded border-neutral-300 dark:border-neutral-600 text-amber-500 focus:ring-amber-500">
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-sm">Alertes de sortie</span>
+          <input type="checkbox" name="release_alerts" <%= 'checked' if current_user.release_alerts? %> class="rounded border-neutral-300 dark:border-neutral-600 text-amber-500 focus:ring-amber-500">
+        </div>
+        <%= f.submit "Enregistrer", class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition cursor-pointer" %>
+      <% end %>
+    </section>
+
+    <!-- Danger Zone -->
+    <section class="bg-white dark:bg-[#1A1A1A] rounded-lg p-6 shadow-sm border border-red-200 dark:border-red-900/50">
+      <h2 class="text-lg font-bold mb-4 text-red-500">Zone de danger</h2>
+      <%= button_to "Supprimer mon compte", settings_path, method: :delete, class: "px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm font-medium transition cursor-pointer", data: { turbo_confirm: "Etes-vous sur de vouloir supprimer votre compte ? Cette action est irreversible." } %>
+    </section>
+  </div>
+</div>

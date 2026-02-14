@@ -1,0 +1,76 @@
+<% content_for(:title) { "Utilisateurs" } %>
+<% content_for(:page_title) { "Utilisateurs" } %>
+
+<div class="flex items-center justify-between mb-6">
+  <div class="flex items-center gap-4">
+    <span class="text-sm text-neutral-400"><%= number_with_delimiter(@total_count) %> utilisateurs</span>
+    <!-- Search -->
+    <%= form_with url: admin_users_path, method: :get, class: "relative" do %>
+      <input type="text" name="q" value="<%= params[:q] %>" placeholder="Rechercher un utilisateur..."
+             class="pl-9 pr-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent w-64">
+      <svg class="absolute left-3 top-2.5 w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    <% end %>
+  </div>
+  <!-- Filters -->
+  <div class="flex items-center gap-2">
+    <%= link_to "Tous", admin_users_path, class: "px-3 py-1.5 rounded-lg text-xs font-medium transition #{params[:filter].blank? ? 'bg-amber-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}" %>
+    <%= link_to "Actifs", admin_users_path(filter: "active"), class: "px-3 py-1.5 rounded-lg text-xs font-medium transition #{params[:filter] == 'active' ? 'bg-amber-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}" %>
+    <%= link_to "Suspendus", admin_users_path(filter: "suspended"), class: "px-3 py-1.5 rounded-lg text-xs font-medium transition #{params[:filter] == 'suspended' ? 'bg-amber-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}" %>
+    <%= link_to "Admins", admin_users_path(filter: "admin"), class: "px-3 py-1.5 rounded-lg text-xs font-medium transition #{params[:filter] == 'admin' ? 'bg-amber-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}" %>
+  </div>
+</div>
+
+<!-- Users Table -->
+<div class="bg-[#1A1A1A] rounded-lg border border-neutral-800 overflow-hidden">
+  <table class="w-full">
+    <thead>
+      <tr class="border-b border-neutral-800 text-left">
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Utilisateur</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Email</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Inscription</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Critiques</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Statut</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-neutral-800">
+      <% @users.each do |user| %>
+        <tr class="hover:bg-neutral-800/50 transition">
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500 text-xs font-bold"><%= user.username[0].upcase %></div>
+              <div>
+                <p class="text-sm font-medium"><%= user.username %></p>
+                <% if user.admin? %>
+                  <span class="text-xs text-amber-500">Admin</span>
+                <% end %>
+              </div>
+            </div>
+          </td>
+          <td class="px-4 py-3 text-sm text-neutral-400"><%= user.email %></td>
+          <td class="px-4 py-3 text-sm text-neutral-400"><%= l(user.created_at, format: :short) %></td>
+          <td class="px-4 py-3 text-sm"><%= user.ratings_count || 0 %></td>
+          <td class="px-4 py-3">
+            <% if user.banned? %>
+              <span class="px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 text-xs">Suspendu</span>
+            <% else %>
+              <span class="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-xs">Actif</span>
+            <% end %>
+          </td>
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-2">
+              <%= link_to "Voir", admin_user_path(user), class: "text-xs text-amber-500 hover:text-amber-400" %>
+              <% if user.banned? %>
+                <%= button_to "Reactiver", unban_admin_user_path(user), method: :post, class: "text-xs text-green-500 hover:text-green-400" %>
+              <% else %>
+                <%= button_to "Suspendre", ban_admin_user_path(user), method: :post, class: "text-xs text-red-500 hover:text-red-400", data: { turbo_confirm: "Suspendre #{user.username} ?" } %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="mt-6"><%== pagy_nav(@pagy) if @pagy.pages > 1 %></div>

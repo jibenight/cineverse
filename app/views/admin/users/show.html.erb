@@ -1,0 +1,133 @@
+<% content_for(:title) { @user.username } %>
+<% content_for(:page_title) { "Utilisateur : #{@user.username}" } %>
+
+<div class="mb-6">
+  <%= link_to "← Retour a la liste", admin_users_path, class: "text-sm text-neutral-400 hover:text-amber-500" %>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- User Info Card -->
+  <div class="lg:col-span-1">
+    <div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+      <div class="text-center mb-6">
+        <div class="w-20 h-20 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500 text-2xl font-bold mx-auto">
+          <%= @user.username[0].upcase %>
+        </div>
+        <h2 class="text-lg font-bold mt-3"><%= @user.username %></h2>
+        <p class="text-sm text-neutral-400"><%= @user.email %></p>
+        <% if @user.admin? %>
+          <span class="inline-block mt-2 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-500 text-xs font-medium">Admin</span>
+        <% end %>
+        <% if @user.banned? %>
+          <span class="inline-block mt-2 px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 text-xs font-medium">Suspendu</span>
+        <% end %>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Inscription</span>
+          <span><%= l(@user.created_at, format: :long) %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Derniere connexion</span>
+          <span><%= @user.last_sign_in_at ? l(@user.last_sign_in_at, format: :short) : "Jamais" %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Critiques</span>
+          <span><%= @user.ratings_count || 0 %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Abonnes</span>
+          <span><%= @user.followers_count || 0 %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Abonnements</span>
+          <span><%= @user.following_count || 0 %></span>
+        </div>
+      </div>
+
+      <hr class="my-4 border-neutral-700">
+
+      <!-- Admin Actions -->
+      <div class="space-y-2">
+        <% if @user.banned? %>
+          <%= button_to "Reactiver le compte", unban_admin_user_path(@user), method: :post, class: "w-full py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-medium transition" %>
+        <% else %>
+          <%= button_to "Suspendre le compte", ban_admin_user_path(@user), method: :post, class: "w-full py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition", data: { turbo_confirm: "Suspendre #{@user.username} ?" } %>
+        <% end %>
+        <% unless @user.admin? %>
+          <%= button_to "Promouvoir admin", promote_admin_admin_user_path(@user), method: :post, class: "w-full py-2 rounded-lg border border-neutral-600 text-sm hover:bg-neutral-800 transition", data: { turbo_confirm: "Promouvoir #{@user.username} en admin ?" } %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity & Details -->
+  <div class="lg:col-span-2 space-y-6">
+    <!-- Recent Reviews -->
+    <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+      <h3 class="text-sm font-semibold mb-4">Dernieres critiques</h3>
+      <% if @recent_ratings.present? %>
+        <div class="space-y-3">
+          <% @recent_ratings.each do |rating| %>
+            <div class="flex items-start gap-3 text-sm">
+              <div class="flex-1">
+                <p class="font-medium"><%= rating.movie.title %></p>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <span class="text-amber-500"><%= rating.score %>/5</span>
+                  <% if rating.spoiler? %>
+                    <span class="text-xs text-red-400">Spoiler</span>
+                  <% end %>
+                </div>
+                <% if rating.review_text.present? %>
+                  <p class="text-neutral-400 mt-1"><%= truncate(rating.review_text, length: 150) %></p>
+                <% end %>
+                <span class="text-xs text-neutral-500"><%= l(rating.created_at, format: :short) %></span>
+              </div>
+              <%= button_to "Supprimer", admin_rating_path(rating), method: :delete, class: "text-xs text-red-500 hover:text-red-400 flex-shrink-0", data: { turbo_confirm: "Supprimer cette critique ?" } %>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-sm text-neutral-500">Aucune critique.</p>
+      <% end %>
+    </div>
+
+    <!-- Reports against this user -->
+    <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+      <h3 class="text-sm font-semibold mb-4">Signalements recus</h3>
+      <% if @reports.present? %>
+        <div class="space-y-3">
+          <% @reports.each do |report| %>
+            <div class="flex items-start gap-3 text-sm">
+              <span class="w-2 h-2 rounded-full mt-1.5 flex-shrink-0 <%= report.resolved? ? 'bg-green-500' : 'bg-red-500' %>"></span>
+              <div class="flex-1">
+                <p><%= report.reason %></p>
+                <span class="text-xs text-neutral-500">par <%= report.reporter&.username %> - <%= l(report.created_at, format: :short) %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-sm text-neutral-500">Aucun signalement.</p>
+      <% end %>
+    </div>
+
+    <!-- Audit Log -->
+    <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+      <h3 class="text-sm font-semibold mb-4">Journal d'activite</h3>
+      <% if @audit_logs.present? %>
+        <div class="space-y-2">
+          <% @audit_logs.each do |log| %>
+            <div class="flex items-center gap-3 text-sm">
+              <span class="text-xs text-neutral-500 w-32 flex-shrink-0"><%= l(log.created_at, format: :short) %></span>
+              <p class="text-neutral-400"><%= log.action %></p>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p class="text-sm text-neutral-500">Aucune activite enregistree.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

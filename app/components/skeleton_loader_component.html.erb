@@ -1,0 +1,38 @@
+<% @count.times do %>
+  <% case @type %>
+  <% when :card %>
+    <div class="rounded-lg overflow-hidden bg-white dark:bg-neutral-900 shadow-sm animate-pulse">
+      <div class="aspect-[2/3] bg-neutral-200 dark:bg-neutral-800"></div>
+      <div class="p-3 space-y-2">
+        <div class="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-3/4"></div>
+        <div class="h-3 bg-neutral-200 dark:bg-neutral-800 rounded w-1/2"></div>
+      </div>
+    </div>
+  <% when :text %>
+    <div class="space-y-2 animate-pulse">
+      <div class="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-full"></div>
+      <div class="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-5/6"></div>
+      <div class="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-4/6"></div>
+    </div>
+  <% when :avatar %>
+    <div class="flex items-center gap-3 animate-pulse">
+      <div class="w-10 h-10 rounded-full bg-neutral-200 dark:bg-neutral-800"></div>
+      <div class="space-y-1.5">
+        <div class="h-3 bg-neutral-200 dark:bg-neutral-800 rounded w-24"></div>
+        <div class="h-2 bg-neutral-200 dark:bg-neutral-800 rounded w-16"></div>
+      </div>
+    </div>
+  <% when :list %>
+    <div class="space-y-3 animate-pulse">
+      <% 5.times do %>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded bg-neutral-200 dark:bg-neutral-800"></div>
+          <div class="flex-1 space-y-1.5">
+            <div class="h-3 bg-neutral-200 dark:bg-neutral-800 rounded w-3/4"></div>
+            <div class="h-2 bg-neutral-200 dark:bg-neutral-800 rounded w-1/2"></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

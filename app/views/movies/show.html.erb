@@ -1,0 +1,97 @@
+<% content_for(:title) { @movie.title } %>
+<%= set_meta_tags title: @movie.title, description: @movie.overview&.truncate(160), og: { title: @movie.title, description: @movie.overview, image: @movie.poster_path ? "https://image.tmdb.org/t/p/w500#{@movie.poster_path}" : nil, type: "video.movie" } %>
+
+<%= render MovieHeroComponent.new(movie: @movie) %>
+
+<div class="max-w-7xl mx-auto px-6 py-8">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-8">
+      <!-- Synopsis -->
+      <section>
+        <h2 class="text-lg font-bold mb-3">Synopsis</h2>
+        <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed"><%= @movie.overview %></p>
+      </section>
+
+      <!-- Cast -->
+      <% if @movie.cast_members.any? %>
+        <section>
+          <h2 class="text-lg font-bold mb-3"><%= t("pages.movies.cast") %></h2>
+          <div class="flex gap-4 overflow-x-auto pb-2">
+            <% @movie.movie_cast_members.ordered.limit(10).includes(:cast_member).each do |mcm| %>
+              <a href="<%= cast_member_path(mcm.cast_member) %>" class="flex-shrink-0 w-20 text-center hover:opacity-80 transition">
+                <% if mcm.cast_member.profile_path %>
+                  <img src="https://image.tmdb.org/t/p/w185<%= mcm.cast_member.profile_path %>" class="w-16 h-16 rounded-full object-cover mx-auto" loading="lazy">
+                <% else %>
+                  <div class="w-16 h-16 rounded-full bg-neutral-200 dark:bg-neutral-700 mx-auto flex items-center justify-center text-lg">🎭</div>
+                <% end %>
+                <p class="text-xs font-medium mt-1 truncate"><%= mcm.cast_member.name %></p>
+                <p class="text-xs text-neutral-400 truncate"><%= mcm.character %></p>
+              </a>
+            <% end %>
+          </div>
+        </section>
+      <% end %>
+
+      <!-- Rating Form -->
+      <% if user_signed_in? %>
+        <section id="rating_form">
+          <h2 class="text-lg font-bold mb-3"><%= t("ratings.your_rating") %></h2>
+          <%= render partial: "ratings/form", locals: { movie: @movie, rating: @user_rating || Rating.new } %>
+        </section>
+      <% end %>
+
+      <!-- Reviews -->
+      <section>
+        <h2 class="text-lg font-bold mb-3"><%= t("pages.movies.reviews") %> (<%= @movie.ratings_count || 0 %>)</h2>
+        <turbo-frame id="reviews" data-turbo-action="advance">
+          <% if @ratings.any? %>
+            <div class="space-y-4">
+              <% @ratings.each do |rating| %>
+                <%= render partial: "ratings/rating", locals: { rating: rating } %>
+              <% end %>
+            </div>
+            <div class="mt-4"><%== pagy_nav(@pagy) %></div>
+          <% else %>
+            <p class="text-sm text-neutral-400"><%= t("pages.movies.no_reviews") %></p>
+          <% end %>
+        </turbo-frame>
+      </section>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="space-y-6">
+      <!-- Actions -->
+      <% if user_signed_in? %>
+        <div class="space-y-2">
+          <%= button_to @in_watchlist ? t("pages.movies.remove_from_watchlist") : t("pages.movies.add_to_watchlist"),
+              toggle_watchlist_movie_path(@movie), method: :post,
+              class: "w-full py-2 rounded-lg text-sm font-medium transition #{@in_watchlist ? 'bg-amber-500 text-white' : 'border border-neutral-300 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-800'}" %>
+          <% if @movie.upcoming? %>
+            <%= button_to @release_alert ? t("pages.movies.cancel_release_alert") : t("pages.movies.notify_release"),
+                toggle_release_alert_movie_path(@movie), method: :post,
+                class: "w-full py-2 rounded-lg text-sm font-medium border border-neutral-300 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition" %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <!-- Booking -->
+      <% if @affiliate_links.present? %>
+        <%= render BookingCardComponent.new(movie: @movie, affiliate_links: @affiliate_links, current_user: current_user) %>
+      <% end %>
+
+      <!-- Movie Info -->
+      <div class="bg-white dark:bg-[#1A1A1A] rounded-lg p-4 shadow-sm space-y-3">
+        <% if @movie.release_date %>
+          <div><span class="text-xs text-neutral-400">Date de sortie</span><p class="text-sm font-medium"><%= l(@movie.release_date, format: :long) %></p></div>
+        <% end %>
+        <% if @movie.runtime&.positive? %>
+          <div><span class="text-xs text-neutral-400">Duree</span><p class="text-sm font-medium"><%= @movie.runtime %> min</p></div>
+        <% end %>
+        <% if @movie.original_language %>
+          <div><span class="text-xs text-neutral-400">Langue originale</span><p class="text-sm font-medium"><%= @movie.original_language.upcase %></p></div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

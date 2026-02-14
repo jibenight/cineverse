@@ -1,0 +1,37 @@
+<div class="flex gap-3 <%= own_message? ? 'flex-row-reverse' : '' %> animate-slide-in" id="message_<%= @message.id %>">
+  <img src="<%= avatar_url %>" alt="<%= @message.user.username %>" class="w-8 h-8 rounded-full flex-shrink-0">
+  <div class="max-w-[70%]">
+    <% unless own_message? %>
+      <span class="text-xs text-neutral-500 dark:text-neutral-400 mb-1 block"><%= @message.user.username %></span>
+    <% end %>
+    <div class="rounded-lg p-3 <%= own_message? ? 'bg-amber-500 text-white' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100' %>">
+      <% case @message.message_type %>
+      <% when "text" %>
+        <p class="text-sm"><%= @message.body %></p>
+      <% when "movie_share" %>
+        <% if @message.shared_movie %>
+          <a href="<%= movie_path(@message.shared_movie) %>" class="block rounded-lg overflow-hidden bg-white/10 hover:bg-white/20 transition">
+            <div class="flex gap-2 p-2">
+              <img src="https://image.tmdb.org/t/p/w92<%= @message.shared_movie.poster_path %>" class="w-12 rounded" alt="">
+              <div>
+                <p class="font-semibold text-sm"><%= @message.shared_movie.title %></p>
+                <p class="text-xs opacity-75"><%= @message.shared_movie.vote_average&.round(1) %>/5</p>
+              </div>
+            </div>
+          </a>
+        <% end %>
+      <% when "cinema_invite" %>
+        <div class="text-center py-2">
+          <p class="text-lg">🎟️</p>
+          <p class="font-semibold text-sm"><%= @message.body %></p>
+        </div>
+      <% when "discount_share" %>
+        <div class="flex items-center gap-2">
+          <span class="text-lg">💰</span>
+          <p class="text-sm"><%= @message.body %></p>
+        </div>
+      <% end %>
+    </div>
+    <span class="text-xs text-neutral-400 mt-1 block <%= own_message? ? 'text-right' : '' %>"><%= l(@message.created_at, format: :short) %></span>
+  </div>
+</div>

@@ -1,0 +1,404 @@
+fr:
+  activerecord:
+    models:
+      user: "Utilisateur"
+      movie: "Film"
+      rating: "Note"
+      conversation: "Conversation"
+      message: "Message"
+      badge: "Badge"
+      cinema_pass: "Pass cinéma"
+      user_discount: "Réduction"
+      report: "Signalement"
+      newsletter_subscriber: "Abonné newsletter"
+    attributes:
+      user:
+        email: "Email"
+        username: "Nom d'utilisateur"
+        password: "Mot de passe"
+        password_confirmation: "Confirmation du mot de passe"
+        bio: "Bio"
+        city: "Ville"
+        avatar: "Avatar"
+        theme_preference: "Thème"
+      rating:
+        score: "Note"
+        review_text: "Critique"
+        spoiler: "Contient des spoilers"
+      movie:
+        title: "Titre"
+        overview: "Synopsis"
+        release_date: "Date de sortie"
+        runtime: "Durée"
+      cinema_pass:
+        provider: "Fournisseur"
+        pass_type: "Type de pass"
+        expiration_date: "Date d'expiration"
+      user_discount:
+        discount_type: "Type de réduction"
+        label: "Intitulé"
+        description: "Description"
+    errors:
+      models:
+        user:
+          attributes:
+            username:
+              blank: "ne peut pas être vide"
+              too_short: "est trop court (minimum %{count} caractères)"
+              too_long: "est trop long (maximum %{count} caractères)"
+              taken: "est déjà pris"
+            email:
+              blank: "ne peut pas être vide"
+              taken: "est déjà utilisé"
+              invalid: "n'est pas valide"
+            password:
+              blank: "ne peut pas être vide"
+              too_short: "est trop court (minimum %{count} caractères)"
+        rating:
+          attributes:
+            score:
+              blank: "est obligatoire"
+              not_a_number: "doit être un nombre"
+
+  # Navigation
+  nav:
+    home: "Accueil"
+    movies: "Films"
+    now_playing: "En salle"
+    upcoming: "Prochainement"
+    trending: "Tendances"
+    search: "Rechercher"
+    chat: "Messages"
+    profile: "Profil"
+    settings: "Paramètres"
+    admin: "Administration"
+    sign_in: "Connexion"
+    sign_up: "Inscription"
+    sign_out: "Déconnexion"
+    notifications: "Notifications"
+    watchlist: "Ma watchlist"
+    deals: "Bons plans"
+
+  # Pages
+  pages:
+    home:
+      title: "CinéVerse"
+      subtitle: "La communauté des passionnés de cinéma"
+      now_playing: "En salle"
+      upcoming: "Prochainement"
+      trending: "Tendances"
+      latest_reviews: "Dernières critiques"
+      see_all: "Voir tout"
+    movies:
+      now_playing: "En salle"
+      upcoming: "Prochainement"
+      trending: "Tendances cette semaine"
+      calendar: "Calendrier des sorties"
+      sort_by: "Trier par"
+      popularity: "Popularité"
+      rating: "Note"
+      release_date: "Date de sortie"
+      days_until_release: "%{count} jour(s) avant la sortie"
+      community_rating: "Note communauté"
+      ratings_count:
+        one: "%{count} vote"
+        other: "%{count} votes"
+      add_to_watchlist: "Ajouter à ma watchlist"
+      remove_from_watchlist: "Retirer de ma watchlist"
+      notify_release: "Me notifier à la sortie"
+      cancel_release_alert: "Annuler l'alerte"
+      book_ticket: "Réserver ma place"
+      view_sessions: "Voir les séances"
+      included_pass: "Accès inclus avec votre pass %{provider}"
+      invite_friend: "Invitez un ami ! Votre pass inclut un accompagnant"
+      commercial_links: "Liens commerciaux"
+      cast: "Casting"
+      reviews: "Critiques"
+      similar: "Films similaires"
+      trailer: "Bande-annonce"
+      no_reviews: "Aucune critique pour le moment. Soyez le premier !"
+    profile:
+      movies_rated: "Films notés"
+      average_rating: "Note moyenne"
+      favorite_genres: "Genres préférés"
+      movies_by_month: "Films vus par mois"
+      badges: "Badges"
+      reviews: "Critiques"
+      watchlist: "Watchlist"
+      followers: "Abonnés"
+      following: "Abonnements"
+      follow: "Suivre"
+      unfollow: "Ne plus suivre"
+      cinema_pass: "Pass cinéma"
+      discounts: "Réductions"
+      edit_profile: "Modifier le profil"
+      member_since: "Membre depuis %{date}"
+    chat:
+      conversations: "Conversations"
+      new_conversation: "Nouvelle conversation"
+      new_group: "Nouveau groupe"
+      group_name: "Nom du groupe"
+      send_message: "Envoyer"
+      type_message: "Écrire un message..."
+      share_movie: "Partager un film"
+      share_discount: "Partager une réduction"
+      invite_cinema: "Inviter au ciné"
+      online: "En ligne"
+      offline: "Hors ligne"
+      unread: "Non lu"
+      muted: "Conversation muette"
+      report_message: "Signaler ce message"
+      leave_group: "Quitter le groupe"
+    deals:
+      title: "Bons Plans Ciné"
+      subtitle: "Découvrez les réductions partagées par la communauté"
+      filter_city: "Filtrer par ville"
+      filter_type: "Type de réduction"
+      contact: "Contacter"
+      login_to_contact: "Connectez-vous pour contacter cet utilisateur"
+    notifications:
+      title: "Notifications"
+      mark_all_read: "Tout marquer comme lu"
+      new_follower: "%{user} vous suit"
+      new_like: "%{user} a aimé votre critique"
+      new_message: "Nouveau message de %{user}"
+      release_alert: "🎬 %{movie} sort aujourd'hui !"
+      badge_earned: "🏆 Badge débloqué : %{badge}"
+      no_notifications: "Aucune notification"
+
+  # Badges
+  badges:
+    cinephile_debutant:
+      name: "Cinéphile débutant"
+      description: "A noté 10 films"
+    cinephile_confirme:
+      name: "Cinéphile confirmé"
+      description: "A noté 50 films"
+    cinephile_expert:
+      name: "Cinéphile expert"
+      description: "A noté 100 films"
+    premiere_critique:
+      name: "Première critique"
+      description: "A écrit sa première critique"
+    critique_prolifique:
+      name: "Critique prolifique"
+      description: "A écrit 25 critiques"
+    aime_communaute:
+      name: "Aimé par la communauté"
+      description: "50 likes reçus sur ses critiques"
+    sociable:
+      name: "Sociable"
+      description: "10 abonnés"
+    influenceur_cine:
+      name: "Influenceur ciné"
+      description: "100 abonnés"
+    membre_fidele:
+      name: "Membre fidèle"
+      description: "Inscrit depuis 1 an"
+    noctambule:
+      name: "Noctambule"
+      description: "A noté un film entre minuit et 5h du matin"
+    binge_watcher:
+      name: "Binge watcher"
+      description: "5 films notés en une journée"
+
+  # Cinema Pass
+  cinema_passes:
+    providers:
+      ugc_illimite: "UGC Illimité"
+      pathe_gaumont_cinepass: "Pathé Gaumont CinéPass"
+      mk2_illimite: "MK2 Illimité"
+      cinepass_independant: "CinéPass Indépendant"
+      other: "Autre"
+    types:
+      solo: "Solo"
+      duo: "Duo"
+      famille: "Famille"
+    expiring_soon: "Votre pass expire dans %{days} jours"
+
+  # Discounts
+  discounts:
+    types:
+      student: "Étudiant"
+      senior: "Senior"
+      unemployed: "Demandeur d'emploi"
+      large_family: "Famille nombreuse"
+      disabled: "Handicap"
+      military: "Militaire"
+      ce: "Comité d'Entreprise"
+      custom: "Autre"
+
+  # Ratings
+  ratings:
+    spoiler_warning: "⚠️ Cette critique contient des spoilers"
+    reveal_spoiler: "Cliquer pour révéler"
+    like: "J'aime"
+    unlike: "Je n'aime plus"
+    report: "Signaler"
+    write_review: "Écrire une critique"
+    your_rating: "Votre note"
+    contains_spoilers: "Contient des spoilers"
+
+  # Reports
+  reports:
+    reasons:
+      spam: "Spam"
+      harassment: "Harcèlement"
+      spoiler: "Spoiler non signalé"
+      inappropriate: "Contenu inapproprié"
+      other: "Autre"
+    submitted: "Signalement envoyé. Merci !"
+
+  # Newsletter
+  newsletter:
+    subscribe: "S'abonner à la newsletter"
+    email_placeholder: "Votre email"
+    first_name_placeholder: "Votre prénom (optionnel)"
+    submit: "S'abonner"
+    confirm_subject: "Confirmez votre inscription à la newsletter CinéVerse"
+    confirmed: "Votre inscription est confirmée ! Bienvenue 🎬"
+    unsubscribed: "Vous êtes désinscrit de la newsletter."
+    categories:
+      weekly_picks: "Sélection de la semaine"
+      new_releases: "Nouvelles sorties"
+      community_highlights: "Highlights communauté"
+      deals: "Bons plans & promos"
+
+  # Flash messages
+  flash:
+    rating:
+      created: "Note enregistrée !"
+      updated: "Note mise à jour !"
+      destroyed: "Note supprimée."
+    watchlist:
+      added: "Film ajouté à votre watchlist"
+      removed: "Film retiré de votre watchlist"
+    follow:
+      created: "Vous suivez désormais %{user}"
+      destroyed: "Vous ne suivez plus %{user}"
+    report:
+      created: "Signalement envoyé"
+    cinema_pass:
+      created: "Pass cinéma ajouté"
+      updated: "Pass cinéma mis à jour"
+      destroyed: "Pass cinéma supprimé"
+    discount:
+      created: "Réduction ajoutée"
+      updated: "Réduction mise à jour"
+      destroyed: "Réduction supprimée"
+
+  # Pundit
+  pundit:
+    not_authorized: "Vous n'êtes pas autorisé à effectuer cette action."
+
+  # Devise (override some defaults)
+  devise:
+    registrations:
+      new:
+        title: "Inscription"
+        sign_up: "S'inscrire"
+      edit:
+        title: "Modifier mon profil"
+    sessions:
+      new:
+        title: "Connexion"
+        sign_in: "Se connecter"
+        remember_me: "Se souvenir de moi"
+    shared:
+      links:
+        sign_in: "Se connecter"
+        sign_up: "S'inscrire"
+        forgot_password: "Mot de passe oublié ?"
+        resend_confirmation: "Renvoyer les instructions de confirmation"
+
+  # Admin
+  admin:
+    dashboard:
+      title: "Tableau de bord"
+      kpi:
+        users: "Utilisateurs"
+        movies: "Films"
+        messages: "Messages"
+        newsletter: "Newsletter"
+        affiliate: "Affiliation"
+        moderation: "Modération"
+      charts:
+        signups: "Inscriptions"
+        active_users: "Utilisateurs actifs"
+        ratings_distribution: "Distribution des notes"
+        top_movies: "Top films"
+        affiliate_clicks: "Clics affiliation"
+        newsletter_growth: "Croissance newsletter"
+        cinema_passes: "Types de pass"
+    users:
+      title: "Gestion des utilisateurs"
+      search: "Rechercher par nom ou email"
+      export_csv: "Exporter CSV"
+      ban: "Bannir"
+      unban: "Débannir"
+      promote_admin: "Promouvoir admin"
+      promote_premium: "Passer premium"
+      remove_premium: "Retirer premium"
+      delete_account: "Supprimer le compte"
+    newsletter:
+      title: "Newsletter"
+      campaigns: "Campagnes"
+      subscribers: "Abonnés"
+      templates: "Templates"
+      new_campaign: "Nouvelle campagne"
+      send: "Envoyer"
+      schedule: "Planifier"
+      preview: "Prévisualiser"
+      duplicate: "Dupliquer"
+      cancel: "Annuler"
+    moderation:
+      title: "Modération"
+      reports: "Signalements"
+      pending: "En attente"
+      resolved: "Résolus"
+      dismiss: "Rejeter"
+      hide_content: "Masquer le contenu"
+      delete_content: "Supprimer le contenu"
+      warn_user: "Avertir l'auteur"
+      mute_user: "Muter l'auteur"
+      ban_user: "Bannir l'auteur"
+    content:
+      title: "Contenu"
+      movies: "Films"
+      static_pages: "Pages statiques"
+      sync_tmdb: "Synchroniser TMDb"
+      force_sync: "Forcer la resynchronisation"
+    system:
+      title: "Système"
+      audit_log: "Journal d'activité"
+      sidekiq: "Sidekiq"
+      tmdb_health: "Santé TMDb"
+      newsletter_status: "Statut newsletter"
+      health_check: "Health check"
+
+  # Time/Date
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%d %b"
+      long: "%d %B %Y"
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      short: "%H:%M"
+      long: "%d %B %Y à %H:%M"
+
+  # General
+  general:
+    save: "Enregistrer"
+    cancel: "Annuler"
+    delete: "Supprimer"
+    edit: "Modifier"
+    back: "Retour"
+    loading: "Chargement..."
+    no_results: "Aucun résultat"
+    confirm_delete: "Êtes-vous sûr de vouloir supprimer ?"
+    or: "ou"
+    and: "et"
+    see_more: "Voir plus"
+    see_less: "Voir moins"

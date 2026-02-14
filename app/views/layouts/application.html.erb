@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr" class="<%= current_user&.dark? ? 'dark' : '' %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= content_for?(:title) ? "#{yield(:title)} — CinéVerse" : "CinéVerse — La communauté des passionnés de cinéma" %></title>
+  <%= display_meta_tags site: "CinéVerse", reverse: true %>
+  <meta name="turbo-cache-control" content="no-preview">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  <%= action_cable_meta_tag %>
+</head>
+<body class="min-h-screen bg-neutral-50 dark:bg-[#0D0D0D] text-neutral-900 dark:text-neutral-100 transition-colors duration-200">
+  <!-- Desktop Sidebar -->
+  <aside class="hidden lg:flex fixed left-0 top-0 bottom-0 w-64 flex-col bg-white dark:bg-[#1A1A1A] border-r border-neutral-200 dark:border-neutral-800 z-40">
+    <div class="p-6">
+      <a href="<%= root_path %>" class="text-2xl font-display font-bold text-amber-500">CinéVerse</a>
+    </div>
+    <nav class="flex-1 px-3 space-y-1">
+      <%= sidebar_link t("nav.home"), root_path, "home" %>
+      <%= sidebar_link t("nav.now_playing"), now_playing_path, "film" %>
+      <%= sidebar_link t("nav.upcoming"), upcoming_movies_path, "calendar" %>
+      <%= sidebar_link t("nav.trending"), trending_path, "trending-up" %>
+      <%= sidebar_link t("nav.search"), search_path, "search" %>
+      <% if user_signed_in? %>
+        <hr class="my-3 border-neutral-200 dark:border-neutral-700">
+        <%= sidebar_link t("nav.chat"), conversations_path, "message-circle" %>
+        <%= sidebar_link t("nav.watchlist"), watchlist_path, "bookmark" %>
+        <%= sidebar_link t("nav.notifications"), notifications_path, "bell" %>
+        <%= sidebar_link t("nav.deals"), deals_path, "tag" %>
+        <hr class="my-3 border-neutral-200 dark:border-neutral-700">
+        <%= sidebar_link t("nav.profile"), user_path(current_user.username), "user" %>
+        <%= sidebar_link t("nav.settings"), settings_path, "settings" %>
+        <% if current_user.admin? %>
+          <%= sidebar_link t("nav.admin"), admin_root_path, "shield" %>
+        <% end %>
+      <% end %>
+    </nav>
+    <div class="p-4 border-t border-neutral-200 dark:border-neutral-800">
+      <% if user_signed_in? %>
+        <div class="flex items-center gap-3">
+          <%= render UserAvatarComponent.new(user: current_user, size: :sm) %>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium truncate"><%= current_user.username %></p>
+          </div>
+          <%= button_to t("nav.sign_out"), destroy_user_session_path, method: :delete, class: "text-xs text-neutral-400 hover:text-red-500" %>
+        </div>
+      <% else %>
+        <div class="space-y-2">
+          <%= link_to t("nav.sign_in"), new_user_session_path, class: "block w-full text-center py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition" %>
+          <%= link_to t("nav.sign_up"), new_user_registration_path, class: "block w-full text-center py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition" %>
+        </div>
+      <% end %>
+      <button data-action="click->theme#toggle" class="mt-3 flex items-center gap-2 text-sm text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300 transition" data-controller="theme">
+        <svg class="w-4 h-4 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        <span class="dark:hidden">Mode sombre</span>
+        <span class="hidden dark:inline">Mode clair</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Tablet Sidebar (icons only) -->
+  <aside class="hidden md:flex lg:hidden fixed left-0 top-0 bottom-0 w-16 flex-col items-center bg-white dark:bg-[#1A1A1A] border-r border-neutral-200 dark:border-neutral-800 z-40 py-4">
+    <a href="<%= root_path %>" class="text-xl font-bold text-amber-500 mb-6">CV</a>
+    <nav class="flex-1 flex flex-col items-center gap-2">
+      <%= icon_link root_path, "home" %>
+      <%= icon_link now_playing_path, "film" %>
+      <%= icon_link search_path, "search" %>
+      <% if user_signed_in? %>
+        <%= icon_link conversations_path, "message-circle" %>
+        <%= icon_link notifications_path, "bell" %>
+      <% end %>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="lg:ml-64 md:ml-16 min-h-screen pb-20 md:pb-0">
+    <% if notice %>
+      <div class="mx-4 mt-4 p-3 rounded-lg bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-sm" data-controller="flash" data-flash-target="message">
+        <%= notice %>
+      </div>
+    <% end %>
+    <% if alert %>
+      <div class="mx-4 mt-4 p-3 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-sm" data-controller="flash" data-flash-target="message">
+        <%= alert %>
+      </div>
+    <% end %>
+    <%= yield %>
+  </main>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-[#1A1A1A] border-t border-neutral-200 dark:border-neutral-800 z-50 safe-area-bottom">
+    <div class="flex items-center justify-around py-2">
+      <%= mobile_nav_link root_path, "home", t("nav.home") %>
+      <%= mobile_nav_link search_path, "search", t("nav.search") %>
+      <%= mobile_nav_link now_playing_path, "film", t("nav.now_playing") %>
+      <% if user_signed_in? %>
+        <%= mobile_nav_link conversations_path, "message-circle", t("nav.chat") %>
+        <%= mobile_nav_link user_path(current_user.username), "user", t("nav.profile") %>
+      <% else %>
+        <%= mobile_nav_link new_user_session_path, "log-in", t("nav.sign_in") %>
+      <% end %>
+    </div>
+  </nav>
+
+  <!-- Footer (hidden on mobile) -->
+  <footer class="hidden md:block lg:ml-64 md:ml-16 bg-white dark:bg-[#1A1A1A] border-t border-neutral-200 dark:border-neutral-800 mt-12">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+          <h3 class="text-lg font-bold text-amber-500 font-display">CinéVerse</h3>
+          <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-2">La communauté des passionnés de cinéma.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-sm mb-3">Liens</h4>
+          <div class="space-y-2">
+            <%= link_to "À propos", about_path, class: "block text-sm text-neutral-500 dark:text-neutral-400 hover:text-amber-500" %>
+            <%= link_to "Contact", contact_path, class: "block text-sm text-neutral-500 dark:text-neutral-400 hover:text-amber-500" %>
+            <%= link_to "FAQ", faq_path, class: "block text-sm text-neutral-500 dark:text-neutral-400 hover:text-amber-500" %>
+            <%= link_to "Confidentialité", privacy_path, class: "block text-sm text-neutral-500 dark:text-neutral-400 hover:text-amber-500" %>
+            <%= link_to "CGU", terms_path, class: "block text-sm text-neutral-500 dark:text-neutral-400 hover:text-amber-500" %>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-semibold text-sm mb-3">Newsletter</h4>
+          <%= render NewsletterFormComponent.new %>
+        </div>
+      </div>
+      <div class="mt-8 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+        <p class="text-xs text-neutral-400 text-center">&copy; <%= Date.current.year %> CinéVerse. Données films fournies par TMDb.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

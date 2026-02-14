@@ -1,0 +1,23 @@
+<% content_for(:title) { "Recherche" } %>
+<div class="max-w-7xl mx-auto px-6 py-8">
+  <h1 class="text-2xl font-bold mb-6"><%= t("nav.search") %></h1>
+  <%= form_with url: search_path, method: :get, class: "mb-8" do %>
+    <div class="flex gap-2">
+      <input type="text" name="q" value="<%= @query %>" placeholder="Rechercher un film..." autofocus
+             class="flex-1 px-4 py-3 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-sm focus:ring-2 focus:ring-amber-500"
+             data-controller="search-autocomplete" data-action="input->search-autocomplete#search">
+      <button type="submit" class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition">Rechercher</button>
+    </div>
+  <% end %>
+
+  <% if @movies&.any? %>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <% @movies.each do |movie| %>
+        <%= render MovieCardComponent.new(movie: movie) %>
+      <% end %>
+    </div>
+    <div class="mt-8"><%== pagy_nav(@pagy) if @pagy&.pages.to_i > 1 %></div>
+  <% elsif @query.present? %>
+    <p class="text-neutral-400 text-center py-12"><%= t("general.no_results") %></p>
+  <% end %>
+</div>

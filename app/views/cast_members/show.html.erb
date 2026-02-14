@@ -1,0 +1,28 @@
+<% content_for(:title) { @cast_member.name } %>
+<div class="max-w-5xl mx-auto px-6 py-8">
+  <!-- Cast Member Header -->
+  <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-8">
+    <% if @cast_member.profile_path %>
+      <img src="https://image.tmdb.org/t/p/w300<%= @cast_member.profile_path %>" class="w-32 h-32 rounded-full object-cover shadow-lg" alt="<%= @cast_member.name %>">
+    <% else %>
+      <div class="w-32 h-32 rounded-full bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center text-4xl">🎭</div>
+    <% end %>
+    <div class="text-center sm:text-left">
+      <h1 class="text-3xl font-bold font-display"><%= @cast_member.name %></h1>
+      <% if @cast_member.biography.present? %>
+        <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-3 max-w-2xl leading-relaxed"><%= truncate(@cast_member.biography, length: 500) %></p>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Filmography -->
+  <section>
+    <h2 class="text-xl font-bold mb-6">Filmographie</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <% @movies.each do |movie| %>
+        <%= render MovieCardComponent.new(movie: movie) %>
+      <% end %>
+    </div>
+    <div class="mt-8"><%== pagy_nav(@pagy) if @pagy.pages > 1 %></div>
+  </section>
+</div>

@@ -1,0 +1,41 @@
+tmdb_sync:
+  cron: "0 */6 * * *"
+  class: "TmdbSyncJob"
+  queue: default
+  description: "Sync movies from TMDb every 6 hours"
+
+release_alert_check:
+  cron: "0 8 * * *"
+  class: "ReleaseAlertJob"
+  queue: default
+  description: "Check and notify for movie releases daily at 8am"
+
+daily_stats_aggregation:
+  cron: "0 3 * * *"
+  class: "DailyStatsAggregationJob"
+  queue: low
+  description: "Aggregate daily stats at 3am"
+
+sitemap_refresh:
+  cron: "0 4 * * *"
+  class: "SitemapRefreshJob"
+  queue: low
+  description: "Regenerate sitemap daily at 4am"
+
+newsletter_weekly:
+  cron: "0 10 * * 0"
+  class: "NewsletterWeeklyJob"
+  queue: mailers
+  description: "Send weekly newsletter on Sunday at 10am"
+
+database_backup:
+  cron: "0 2 * * *"
+  class: "DatabaseBackupJob"
+  queue: low
+  description: "Backup PostgreSQL daily at 2am"
+
+cinema_pass_expiration_check:
+  cron: "0 9 * * *"
+  class: "CinemaPassExpirationJob"
+  queue: default
+  description: "Notify users of expiring cinema passes"

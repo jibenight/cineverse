@@ -1,0 +1,9 @@
+<%= raw @campaign.body_html %>
+<hr>
+<p style="font-size:12px;color:#999;">
+  Vous recevez cet email car vous êtes inscrit à la newsletter CinéVerse.<br>
+  <a href="<%= @unsubscribe_url %>">Se désinscrire</a> |
+  <a href="<%= newsletter_preferences_url(token: @subscriber.confirmation_token) %>">Gérer mes préférences</a><br>
+  CinéVerse — cineverse.fr
+</p>
+<img src="<%= @tracking_pixel_url %>" width="1" height="1" alt="" style="display:none;">

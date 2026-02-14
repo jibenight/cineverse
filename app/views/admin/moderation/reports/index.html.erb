@@ -1,0 +1,87 @@
+<% content_for(:title) { "Moderation" } %>
+<% content_for(:page_title) { "Signalements" } %>
+
+<div class="flex items-center justify-between mb-6">
+  <div class="flex items-center gap-4">
+    <span class="text-sm text-neutral-400"><%= number_with_delimiter(@total_count) %> signalements</span>
+  </div>
+  <!-- Status Filters -->
+  <div class="flex items-center gap-2">
+    <%= link_to "Tous", admin_moderation_reports_path, class: "px-3 py-1.5 rounded-lg text-xs font-medium transition #{params[:status].blank? ? 'bg-amber-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}" %>
+    <%= link_to "En attente", admin_moderation_reports_path(status: "pending"), class: "px-3 py-1.5 rounded-lg text-xs font-medium transition #{params[:status] == 'pending' ? 'bg-amber-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}" %>
+    <%= link_to "Resolus", admin_moderation_reports_path(status: "resolved"), class: "px-3 py-1.5 rounded-lg text-xs font-medium transition #{params[:status] == 'resolved' ? 'bg-amber-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}" %>
+    <%= link_to "Rejetes", admin_moderation_reports_path(status: "dismissed"), class: "px-3 py-1.5 rounded-lg text-xs font-medium transition #{params[:status] == 'dismissed' ? 'bg-amber-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}" %>
+  </div>
+</div>
+
+<!-- Reports List -->
+<div class="space-y-4">
+  <% if @reports.any? %>
+    <% @reports.each do |report| %>
+      <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <!-- Report Header -->
+            <div class="flex items-center gap-3 mb-2">
+              <% case report.status %>
+              <% when "pending" %>
+                <span class="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-medium">En attente</span>
+              <% when "resolved" %>
+                <span class="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-xs font-medium">Resolu</span>
+              <% when "dismissed" %>
+                <span class="px-2 py-0.5 rounded-full bg-neutral-500/20 text-neutral-400 text-xs font-medium">Rejete</span>
+              <% end %>
+              <span class="text-xs text-neutral-500"><%= time_ago_in_words(report.created_at) %></span>
+            </div>
+
+            <!-- Report Content -->
+            <div class="mb-3">
+              <p class="text-sm font-medium">Motif : <%= report.reason %></p>
+              <% if report.details.present? %>
+                <p class="text-sm text-neutral-400 mt-1"><%= report.details %></p>
+              <% end %>
+            </div>
+
+            <!-- Reporter & Reported -->
+            <div class="flex items-center gap-4 text-xs text-neutral-400">
+              <span>Signale par : <strong class="text-neutral-200"><%= report.reporter&.username %></strong></span>
+              <span>Utilisateur signale : <strong class="text-neutral-200"><%= report.reported_user&.username %></strong></span>
+              <% if report.reportable_type.present? %>
+                <span>Type : <strong class="text-neutral-200"><%= report.reportable_type %></strong></span>
+              <% end %>
+            </div>
+
+            <!-- Reported Content Preview -->
+            <% if report.reportable.present? %>
+              <div class="mt-3 p-3 rounded-lg bg-neutral-800/50 border border-neutral-700">
+                <p class="text-xs text-neutral-400 mb-1">Contenu signale :</p>
+                <p class="text-sm"><%= truncate(report.reportable.try(:review_text) || report.reportable.try(:body) || "N/A", length: 300) %></p>
+              </div>
+            <% end %>
+          </div>
+
+          <!-- Actions -->
+          <% if report.pending? %>
+            <div class="flex items-center gap-2 ml-4 flex-shrink-0">
+              <%= button_to "Resoudre", resolve_admin_moderation_report_path(report), method: :patch, class: "px-3 py-1.5 rounded-lg bg-green-600 hover:bg-green-700 text-white text-xs font-medium transition" %>
+              <%= button_to "Rejeter", dismiss_admin_moderation_report_path(report), method: :patch, class: "px-3 py-1.5 rounded-lg bg-neutral-700 hover:bg-neutral-600 text-white text-xs font-medium transition" %>
+              <%= button_to "Suspendre l'utilisateur", ban_admin_user_path(report.reported_user), method: :patch, class: "px-3 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-medium transition", data: { turbo_confirm: "Suspendre #{report.reported_user&.username} ?" } %>
+            </div>
+          <% end %>
+        </div>
+
+        <% if report.resolved_by.present? %>
+          <div class="mt-3 pt-3 border-t border-neutral-700 text-xs text-neutral-500">
+            Traite par <%= report.resolved_by.username %> le <%= l(report.resolved_at, format: :short) %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="mt-6"><%== pagy_nav(@pagy) if @pagy.pages > 1 %></div>
+  <% else %>
+    <div class="text-center py-12">
+      <p class="text-neutral-400 text-sm">Aucun signalement<%= " #{params[:status]}" if params[:status].present? %>.</p>
+    </div>
+  <% end %>
+</div>

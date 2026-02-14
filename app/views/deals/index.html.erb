@@ -1,0 +1,38 @@
+<% content_for(:title) { t("pages.deals.title") } %>
+<div class="max-w-7xl mx-auto px-6 py-8">
+  <h1 class="text-2xl font-bold mb-2"><%= t("pages.deals.title") %></h1>
+  <p class="text-sm text-neutral-500 dark:text-neutral-400 mb-6"><%= t("pages.deals.subtitle") %></p>
+
+  <% if @discounts.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @discounts.each do |discount| %>
+        <div class="bg-white dark:bg-[#1A1A1A] rounded-lg p-4 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center gap-3 mb-3">
+            <%= render UserAvatarComponent.new(user: discount.user, size: :sm) %>
+            <div>
+              <p class="text-sm font-medium"><%= discount.user.username %></p>
+              <p class="text-xs text-neutral-400"><%= discount.user.city %></p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 mb-2">
+            <%= render DiscountBadgeComponent.new(discount: discount) %>
+          </div>
+          <p class="text-sm"><%= discount.label %></p>
+          <% if discount.description.present? %>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-1"><%= discount.description.truncate(100) %></p>
+          <% end %>
+          <% if user_signed_in? %>
+            <%= link_to t("pages.deals.contact"), user_path(discount.user.username), class: "mt-3 inline-block px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium transition" %>
+          <% else %>
+            <p class="mt-3 text-xs text-neutral-400"><%= t("pages.deals.login_to_contact") %></p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <div class="mt-8"><%== pagy_nav(@pagy) if @pagy.pages > 1 %></div>
+  <% else %>
+    <div class="text-center py-12">
+      <p class="text-neutral-400 text-sm"><%= t("general.no_results") %></p>
+    </div>
+  <% end %>
+</div>

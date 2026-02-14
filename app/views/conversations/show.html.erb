@@ -1,0 +1,34 @@
+<% content_for(:title) { "Conversation" } %>
+<div class="max-w-4xl mx-auto px-6 py-8">
+  <% other_user = @conversation.other_participant(current_user) %>
+
+  <div class="bg-white dark:bg-[#1A1A1A] rounded-lg shadow-sm overflow-hidden">
+    <!-- Header -->
+    <div class="flex items-center gap-3 p-4 border-b border-neutral-200 dark:border-neutral-700">
+      <%= render UserAvatarComponent.new(user: other_user, size: :sm) %>
+      <%= link_to other_user.username, user_path(other_user.username), class: "font-medium text-sm hover:text-amber-500" %>
+    </div>
+
+    <!-- Messages -->
+    <div class="h-96 overflow-y-auto p-4 space-y-4" id="messages" data-controller="chat-scroll">
+      <turbo-frame id="messages_list">
+        <% @messages.each do |message| %>
+          <div class="flex <%= message.user == current_user ? 'justify-end' : 'justify-start' %>">
+            <div class="max-w-xs px-4 py-2 rounded-2xl text-sm <%= message.user == current_user ? 'bg-amber-500 text-white' : 'bg-neutral-100 dark:bg-neutral-800' %>">
+              <p><%= message.body %></p>
+              <span class="text-xs opacity-60 mt-1 block"><%= l(message.created_at, format: :short) %></span>
+            </div>
+          </div>
+        <% end %>
+      </turbo-frame>
+    </div>
+
+    <!-- Input -->
+    <div class="p-4 border-t border-neutral-200 dark:border-neutral-700">
+      <%= form_with model: [@conversation, Message.new], class: "flex gap-2" do |f| %>
+        <%= f.text_field :body, placeholder: "Votre message...", class: "flex-1 px-4 py-2 rounded-xl bg-neutral-50 dark:bg-neutral-800 border-0 text-sm focus:ring-2 focus:ring-amber-500", autocomplete: "off" %>
+        <%= f.submit "Envoyer", class: "px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition cursor-pointer" %>
+      <% end %>
+    </div>
+  </div>
+</div>

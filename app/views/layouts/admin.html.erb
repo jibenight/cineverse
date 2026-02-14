@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= content_for?(:title) ? "#{yield(:title)} — Admin CinéVerse" : "Admin CinéVerse" %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+  <%= javascript_include_tag "chartkick", "data-turbo-track": "reload" %>
+</head>
+<body class="min-h-screen bg-[#0D0D0D] text-neutral-100">
+  <aside class="fixed left-0 top-0 bottom-0 w-64 bg-[#111111] border-r border-neutral-800 z-40 flex flex-col">
+    <div class="p-6">
+      <a href="<%= admin_root_path %>" class="text-xl font-bold text-amber-500">CinéVerse Admin</a>
+    </div>
+    <nav class="flex-1 px-3 space-y-1">
+      <a href="<%= admin_root_path %>" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-neutral-800 transition">📊 Tableau de bord</a>
+      <a href="<%= admin_users_path %>" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-neutral-800 transition">👤 Utilisateurs</a>
+      <a href="<%= admin_newsletter_campaigns_path %>" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-neutral-800 transition">📧 Newsletter</a>
+      <a href="<%= admin_affiliates_path %>" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-neutral-800 transition">🎟️ Affiliation</a>
+      <a href="<%= admin_moderation_reports_path %>" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-neutral-800 transition">🚨 Modération</a>
+      <a href="<%= admin_content_movies_path %>" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-neutral-800 transition">🎬 Contenu</a>
+      <a href="<%= admin_system_audit_log_path %>" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-neutral-800 transition">⚙️ Système</a>
+      <hr class="my-3 border-neutral-700">
+      <a href="<%= root_path %>" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-neutral-400 hover:bg-neutral-800 transition">← Retour au site</a>
+    </nav>
+    <div class="p-4 border-t border-neutral-800">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-white text-sm font-bold"><%= current_user.username[0].upcase %></div>
+        <span class="text-sm"><%= current_user.username %></span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="ml-64 min-h-screen">
+    <header class="sticky top-0 z-30 bg-[#0D0D0D]/80 backdrop-blur border-b border-neutral-800 px-8 py-4">
+      <div class="flex items-center justify-between">
+        <h1 class="text-lg font-semibold"><%= yield(:page_title) if content_for?(:page_title) %></h1>
+        <div class="flex items-center gap-4">
+          <span class="text-xs text-neutral-500"><%= l(Time.current, format: :long) %></span>
+        </div>
+      </div>
+    </header>
+
+    <div class="p-8">
+      <% if notice %>
+        <div class="mb-6 p-3 rounded-lg bg-green-900/30 text-green-300 text-sm"><%= notice %></div>
+      <% end %>
+      <% if alert %>
+        <div class="mb-6 p-3 rounded-lg bg-red-900/30 text-red-300 text-sm"><%= alert %></div>
+      <% end %>
+      <%= yield %>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<% content_for(:title) { "Politique de confidentialite" } %>
+<div class="max-w-3xl mx-auto px-6 py-12">
+  <h1 class="text-3xl font-bold font-display mb-6">Politique de confidentialite</h1>
+
+  <div class="prose dark:prose-invert prose-sm max-w-none bg-white dark:bg-[#1A1A1A] rounded-lg p-6 shadow-sm">
+    <p>Derniere mise a jour : <%= Date.current.strftime("%d/%m/%Y") %></p>
+
+    <h2>1. Collecte des donnees</h2>
+    <p>Nous collectons les donnees suivantes lors de votre inscription et utilisation de CineVerse :</p>
+    <ul>
+      <li>Adresse email</li>
+      <li>Nom d'utilisateur</li>
+      <li>Photo de profil (optionnel)</li>
+      <li>Vos critiques et notes de films</li>
+      <li>Vos messages dans les conversations</li>
+    </ul>
+
+    <h2>2. Utilisation des donnees</h2>
+    <p>Vos donnees sont utilisees uniquement pour :</p>
+    <ul>
+      <li>Fournir et ameliorer le service CineVerse</li>
+      <li>Personnaliser votre experience</li>
+      <li>Vous envoyer des notifications pertinentes</li>
+      <li>Assurer la securite de la plateforme</li>
+    </ul>
+
+    <h2>3. Partage des donnees</h2>
+    <p>Nous ne vendons ni ne partageons vos donnees personnelles avec des tiers, sauf obligation legale.</p>
+
+    <h2>4. Cookies</h2>
+    <p>CineVerse utilise des cookies essentiels au fonctionnement du site (session, preferences). Aucun cookie publicitaire n'est utilise.</p>
+
+    <h2>5. Vos droits</h2>
+    <p>Conformement au RGPD, vous disposez d'un droit d'acces, de rectification et de suppression de vos donnees. Contactez-nous pour exercer ces droits.</p>
+
+    <h2>6. Contact</h2>
+    <p>Pour toute question relative a la protection de vos donnees, contactez-nous via la page <%= link_to "Contact", contact_path, class: "text-amber-500" %>.</p>
+  </div>
+</div>

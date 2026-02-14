@@ -1,0 +1,28 @@
+<div class="rounded-lg bg-white dark:bg-neutral-900 p-4 shadow-sm">
+  <h3 class="font-semibold text-sm text-neutral-900 dark:text-neutral-100 mb-3">Réserver ma place</h3>
+  <div class="space-y-2">
+    <% @affiliate_links.each do |link| %>
+      <a href="<%= affiliate_redirect_path(provider: link[:provider_key], movie_id: @movie.id) %>"
+         target="_blank"
+         rel="noopener sponsored"
+         class="flex items-center justify-between p-3 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition">
+        <div class="flex items-center gap-3">
+          <span class="font-medium text-sm text-neutral-900 dark:text-neutral-100"><%= link[:name] %></span>
+        </div>
+        <% if link[:has_pass] %>
+          <span class="text-xs px-2 py-1 rounded-full bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300">
+            ✅ Voir les séances
+          </span>
+        <% else %>
+          <span class="text-xs px-2 py-1 rounded-full bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300">
+            Réserver →
+          </span>
+        <% end %>
+      </a>
+      <% if link[:can_invite] %>
+        <p class="text-xs text-green-600 dark:text-green-400 ml-2">Votre pass inclut un accompagnant</p>
+      <% end %>
+    <% end %>
+  </div>
+  <p class="text-xs text-neutral-400 mt-3">Liens commerciaux</p>
+</div>

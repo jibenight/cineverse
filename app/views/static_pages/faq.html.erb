@@ -1,0 +1,46 @@
+<% content_for(:title) { "FAQ" } %>
+<div class="max-w-3xl mx-auto px-6 py-12">
+  <h1 class="text-3xl font-bold font-display mb-6">Foire aux questions</h1>
+
+  <div class="space-y-4">
+    <div class="bg-white dark:bg-[#1A1A1A] rounded-lg p-5 shadow-sm" data-controller="accordion">
+      <button class="flex items-center justify-between w-full text-left" data-action="click->accordion#toggle">
+        <span class="font-medium text-sm">Comment creer un compte ?</span>
+        <svg class="w-5 h-5 text-neutral-400 transition-transform" data-accordion-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="mt-3 text-sm text-neutral-600 dark:text-neutral-400 hidden" data-accordion-target="content">
+        Cliquez sur "S'inscrire" dans la barre de navigation, puis remplissez le formulaire avec votre adresse email et un mot de passe.
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-[#1A1A1A] rounded-lg p-5 shadow-sm" data-controller="accordion">
+      <button class="flex items-center justify-between w-full text-left" data-action="click->accordion#toggle">
+        <span class="font-medium text-sm">Comment noter un film ?</span>
+        <svg class="w-5 h-5 text-neutral-400 transition-transform" data-accordion-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="mt-3 text-sm text-neutral-600 dark:text-neutral-400 hidden" data-accordion-target="content">
+        Rendez-vous sur la page d'un film et utilisez le formulaire de notation. Vous pouvez attribuer une note de 0.5 a 5 etoiles et laisser un commentaire optionnel.
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-[#1A1A1A] rounded-lg p-5 shadow-sm" data-controller="accordion">
+      <button class="flex items-center justify-between w-full text-left" data-action="click->accordion#toggle">
+        <span class="font-medium text-sm">Comment fonctionne la watchlist ?</span>
+        <svg class="w-5 h-5 text-neutral-400 transition-transform" data-accordion-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="mt-3 text-sm text-neutral-600 dark:text-neutral-400 hidden" data-accordion-target="content">
+        Ajoutez des films a votre watchlist en cliquant sur le bouton "Ajouter a ma liste" sur la page d'un film. Retrouvez tous vos films enregistres dans la section Watchlist.
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-[#1A1A1A] rounded-lg p-5 shadow-sm" data-controller="accordion">
+      <button class="flex items-center justify-between w-full text-left" data-action="click->accordion#toggle">
+        <span class="font-medium text-sm">D'ou viennent les donnees des films ?</span>
+        <svg class="w-5 h-5 text-neutral-400 transition-transform" data-accordion-target="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="mt-3 text-sm text-neutral-600 dark:text-neutral-400 hidden" data-accordion-target="content">
+        Les informations sur les films (synopsis, casting, affiches, etc.) sont fournies par The Movie Database (TMDb), une base de donnees collaborative et gratuite.
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+provider: postmark
+from_email: "newsletter@cineverse.fr"
+from_name: "CinéVerse"
+reply_to: "hello@cineverse.fr"
+batch_size: 500
+rate_limit_per_second: 10
