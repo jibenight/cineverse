@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@source "../../views";
+@source "../../components";
+@source "../../helpers";
+@source "../../javascript";
+
 @theme {
   /* Fonts */
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
