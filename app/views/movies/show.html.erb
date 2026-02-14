@@ -1,5 +1,5 @@
 <% content_for(:title) { @movie.title } %>
-<%= set_meta_tags title: @movie.title, description: @movie.overview&.truncate(160), og: { title: @movie.title, description: @movie.overview, image: @movie.poster_path ? "https://image.tmdb.org/t/p/w500#{@movie.poster_path}" : nil, type: "video.movie" } %>
+<% set_meta_tags title: @movie.title, description: @movie.overview&.truncate(160), og: { title: @movie.title, description: @movie.overview, image: @movie.poster_path ? "https://image.tmdb.org/t/p/w500#{@movie.poster_path}" : nil, type: "video.movie" } %>
 
 <%= render MovieHeroComponent.new(movie: @movie) %>
 
