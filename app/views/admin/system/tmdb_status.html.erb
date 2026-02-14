@@ -1,0 +1,44 @@
+<% content_for(:title) { "Statut TMDb" } %>
+<% content_for(:page_title) { "Statut TMDb" } %>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+  <!-- Movies Count -->
+  <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+    <p class="text-xs text-neutral-400 uppercase tracking-wider">Films en base</p>
+    <p class="text-2xl font-bold mt-1"><%= number_with_delimiter(@movies_count) %></p>
+  </div>
+
+  <!-- Last Updated -->
+  <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+    <p class="text-xs text-neutral-400 uppercase tracking-wider">Derniere MAJ film</p>
+    <p class="text-2xl font-bold mt-1">
+      <% if @last_updated.present? %>
+        <%= time_ago_in_words(@last_updated) %>
+      <% else %>
+        -
+      <% end %>
+    </p>
+  </div>
+
+  <!-- Last Full Sync -->
+  <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+    <p class="text-xs text-neutral-400 uppercase tracking-wider">Derniere synchro complete</p>
+    <p class="text-2xl font-bold mt-1">
+      <% if @last_sync.present? %>
+        <%= time_ago_in_words(@last_sync.created_at) %>
+      <% else %>
+        Jamais
+      <% end %>
+    </p>
+    <% if @last_sync.present? %>
+      <p class="text-xs text-neutral-500 mt-1">par <%= @last_sync.admin&.username %></p>
+    <% end %>
+  </div>
+</div>
+
+<div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+  <h3 class="text-sm font-semibold mb-4">Actions</h3>
+  <div class="flex items-center gap-3">
+    <%= button_to "Synchroniser tous les films", sync_all_admin_content_movies_path, method: :post, class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition", data: { turbo_confirm: "Lancer la synchronisation TMDb ?" } %>
+  </div>
+</div>

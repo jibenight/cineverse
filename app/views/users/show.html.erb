@@ -17,11 +17,13 @@
         </div>
         <% if user_signed_in? && @user != current_user %>
           <div class="mt-4 flex gap-2 justify-center sm:justify-start">
-            <% if current_user.following?(@user) %>
-              <%= button_to "Se desabonner", unfollow_user_path(@user.username), method: :delete, class: "px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition" %>
-            <% else %>
-              <%= button_to "Suivre", follow_user_path(@user.username), method: :post, class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition" %>
-            <% end %>
+            <div id="follow_button_<%= @user.id %>">
+              <% if current_user.following?(@user) %>
+                <%= button_to "Se desabonner", unfollow_user_path(@user.username), method: :delete, class: "px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition" %>
+              <% else %>
+                <%= button_to "Suivre", follow_user_path(@user.username), method: :post, class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition" %>
+              <% end %>
+            </div>
             <%= link_to "Message", new_conversation_path(recipient: @user.username), class: "px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition" %>
           </div>
         <% end %>

@@ -1,0 +1,52 @@
+<% content_for(:title) { "Journal d'audit" } %>
+<% content_for(:page_title) { "Journal d'audit" } %>
+
+<div class="mb-6">
+  <span class="text-sm text-neutral-400">Actions administrateur</span>
+</div>
+
+<div class="bg-[#1A1A1A] rounded-lg border border-neutral-800 overflow-hidden">
+  <table class="w-full">
+    <thead>
+      <tr class="border-b border-neutral-800 text-left">
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Date</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Admin</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Action</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Cible</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Details</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-neutral-800">
+      <% @logs.each do |log| %>
+        <tr class="hover:bg-neutral-800/50 transition">
+          <td class="px-4 py-3 text-sm text-neutral-400"><%= l(log.created_at, format: :short) %></td>
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-2">
+              <div class="w-6 h-6 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500 text-xs font-bold"><%= log.admin&.username&.first&.upcase %></div>
+              <span class="text-sm"><%= log.admin&.username %></span>
+            </div>
+          </td>
+          <td class="px-4 py-3">
+            <span class="px-2 py-0.5 rounded-full bg-neutral-800 text-neutral-300 text-xs font-mono"><%= log.action %></span>
+          </td>
+          <td class="px-4 py-3 text-sm text-neutral-400">
+            <% if log.target_type.present? %>
+              <span class="text-neutral-500"><%= log.target_type %></span> #<%= log.target_id %>
+            <% else %>
+              <span class="text-neutral-600">-</span>
+            <% end %>
+          </td>
+          <td class="px-4 py-3 text-sm text-neutral-500">
+            <% if log.metadata.present? && log.metadata.any? %>
+              <span class="text-xs font-mono"><%= log.metadata.to_json.truncate(80) %></span>
+            <% else %>
+              -
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="mt-6"><%== pagy_nav(@pagy) if @pagy.pages > 1 %></div>

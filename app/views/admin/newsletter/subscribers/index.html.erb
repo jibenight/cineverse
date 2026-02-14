@@ -1,0 +1,84 @@
+<% content_for(:title) { "Abonnes Newsletter" } %>
+<% content_for(:page_title) { "Abonnes Newsletter" } %>
+
+<div class="flex items-center justify-between mb-6">
+  <div class="flex items-center gap-4">
+    <span class="text-sm text-neutral-400"><%= @subscribers.size %> abonnes</span>
+    <!-- Search -->
+    <%= form_with url: admin_newsletter_subscribers_path, method: :get, class: "relative" do %>
+      <label for="subscriber_search" class="sr-only">Rechercher un abonne</label>
+      <input type="text" name="q" id="subscriber_search" value="<%= params[:q] %>" placeholder="Rechercher par email..."
+             class="pl-9 pr-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent w-64">
+      <svg class="absolute left-3 top-2.5 w-4 h-4 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    <% end %>
+  </div>
+  <div class="flex items-center gap-2">
+    <!-- Status Filters -->
+    <%= link_to "Tous", admin_newsletter_subscribers_path, class: "px-3 py-1.5 rounded-lg text-xs font-medium transition #{params[:status].blank? ? 'bg-amber-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}" %>
+    <%= link_to "Actifs", admin_newsletter_subscribers_path(status: "active"), class: "px-3 py-1.5 rounded-lg text-xs font-medium transition #{params[:status] == 'active' ? 'bg-amber-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}" %>
+    <%= link_to "En attente", admin_newsletter_subscribers_path(status: "pending"), class: "px-3 py-1.5 rounded-lg text-xs font-medium transition #{params[:status] == 'pending' ? 'bg-amber-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}" %>
+    <%= link_to "Desinscrits", admin_newsletter_subscribers_path(status: "unsubscribed"), class: "px-3 py-1.5 rounded-lg text-xs font-medium transition #{params[:status] == 'unsubscribed' ? 'bg-amber-500 text-white' : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'}" %>
+    <!-- Export -->
+    <%= link_to "Exporter CSV", export_csv_admin_newsletter_subscribers_path, class: "px-3 py-1.5 rounded-lg bg-neutral-800 text-neutral-400 hover:bg-neutral-700 text-xs font-medium transition" %>
+  </div>
+</div>
+
+<!-- Import CSV -->
+<div class="bg-[#1A1A1A] rounded-lg p-4 border border-neutral-800 mb-6">
+  <p class="text-sm font-medium mb-2">Importer des abonnes</p>
+  <%= form_with url: import_csv_admin_newsletter_subscribers_path, method: :post, multipart: true, class: "flex items-center gap-3" do %>
+    <input type="file" name="file" accept=".csv" class="text-sm text-neutral-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-neutral-800 file:text-neutral-400 hover:file:bg-neutral-700">
+    <button type="submit" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium transition">Importer</button>
+  <% end %>
+</div>
+
+<!-- Subscribers Table -->
+<div class="bg-[#1A1A1A] rounded-lg border border-neutral-800 overflow-hidden">
+  <table class="w-full">
+    <thead>
+      <tr class="border-b border-neutral-800 text-left">
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Email</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Prenom</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Statut</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Source</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Inscription</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-neutral-800">
+      <% @subscribers.each do |subscriber| %>
+        <tr class="hover:bg-neutral-800/50 transition">
+          <td class="px-4 py-3 text-sm"><%= subscriber.email %></td>
+          <td class="px-4 py-3 text-sm text-neutral-400"><%= subscriber.first_name || "-" %></td>
+          <td class="px-4 py-3">
+            <% case subscriber.status %>
+            <% when "active" %>
+              <span class="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-xs font-medium">Actif</span>
+            <% when "pending" %>
+              <span class="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-medium">En attente</span>
+            <% when "unsubscribed" %>
+              <span class="px-2 py-0.5 rounded-full bg-neutral-500/20 text-neutral-400 text-xs font-medium">Desinscrit</span>
+            <% when "bounced" %>
+              <span class="px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 text-xs font-medium">Bounce</span>
+            <% end %>
+          </td>
+          <td class="px-4 py-3 text-sm text-neutral-400"><%= subscriber.source %></td>
+          <td class="px-4 py-3 text-sm text-neutral-400"><%= l(subscriber.created_at, format: :short) %></td>
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-2">
+              <%= link_to "Voir", admin_newsletter_subscriber_path(subscriber), class: "text-xs text-amber-500 hover:text-amber-400" %>
+              <% if subscriber.active? %>
+                <%= button_to "Desinscrire", unsubscribe_admin_newsletter_subscriber_path(subscriber), method: :post, class: "text-xs text-red-500 hover:text-red-400" %>
+              <% end %>
+              <% if subscriber.pending? %>
+                <%= button_to "Renvoyer", resend_confirmation_admin_newsletter_subscriber_path(subscriber), method: :post, class: "text-xs text-blue-500 hover:text-blue-400" %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="mt-6"><%== pagy_nav(@pagy) if @pagy.pages > 1 %></div>

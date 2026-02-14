@@ -1,0 +1,44 @@
+<%= form_with model: cinema_pass, url: cinema_pass.persisted? ? settings_cinema_pass_path(cinema_pass) : settings_cinema_passes_path, class: "space-y-4" do |f| %>
+  <% if cinema_pass.errors.any? %>
+    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+      <ul class="list-disc list-inside text-sm text-red-600 dark:text-red-400">
+        <% cinema_pass.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <label class="text-sm font-medium block mb-1">Abonnement</label>
+    <%= f.select :provider, CinemaPass.providers.keys.map { |p| [p.titleize.gsub("_", " "), p] }, { include_blank: "Choisir un abonnement" }, class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
+  </div>
+
+  <div id="custom_provider_field" class="<%= 'hidden' unless cinema_pass.other? %>">
+    <label class="text-sm font-medium block mb-1">Nom personnalis&eacute;</label>
+    <%= f.text_field :provider_custom_name, placeholder: "Nom de votre abonnement", class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
+  </div>
+
+  <div>
+    <label class="text-sm font-medium block mb-1">Type de carte</label>
+    <%= f.select :pass_type, CinemaPass.pass_types.keys.map { |t| [t.capitalize, t] }, { include_blank: "Choisir un type" }, class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
+  </div>
+
+  <div>
+    <label class="text-sm font-medium block mb-1">Date d'expiration</label>
+    <%= f.date_field :expiration_date, class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
+  </div>
+
+  <div class="flex items-center justify-between">
+    <div>
+      <p class="text-sm font-medium">Afficher sur le profil</p>
+      <p class="text-xs text-neutral-400">Rendre cette carte visible sur votre profil public</p>
+    </div>
+    <%= f.check_box :display_on_profile, class: "rounded border-neutral-300 dark:border-neutral-600 text-amber-500 focus:ring-amber-500" %>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <%= f.submit cinema_pass.persisted? ? "Mettre à jour" : "Ajouter", class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition cursor-pointer" %>
+    <%= link_to "Annuler", settings_path, class: "px-4 py-2 rounded-lg bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-sm font-medium transition" %>
+  </div>
+<% end %>

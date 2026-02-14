@@ -1,0 +1,65 @@
+<% content_for(:title) { "Films" } %>
+<% content_for(:page_title) { "Gestion des films" } %>
+
+<div class="flex items-center justify-between mb-6">
+  <span class="text-sm text-neutral-400"><%= number_with_delimiter(@movies.size) %> films</span>
+  <div class="flex items-center gap-2">
+    <%= button_to "Synchroniser tous les films", sync_all_admin_content_movies_path, method: :post, class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition", data: { turbo_confirm: "Lancer la synchronisation TMDb ?" } %>
+  </div>
+</div>
+
+<div class="bg-[#1A1A1A] rounded-lg border border-neutral-800 overflow-hidden">
+  <table class="w-full">
+    <thead>
+      <tr class="border-b border-neutral-800 text-left">
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Film</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">TMDb ID</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Statut</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Date de sortie</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Note</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Critiques</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-neutral-800">
+      <% @movies.each do |movie| %>
+        <tr class="hover:bg-neutral-800/50 transition">
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-3">
+              <% if movie.poster_path.present? %>
+                <img src="https://image.tmdb.org/t/p/w92<%= movie.poster_path %>" alt="" class="w-8 h-12 rounded object-cover">
+              <% else %>
+                <div class="w-8 h-12 rounded bg-neutral-800 flex items-center justify-center text-neutral-600 text-xs">N/A</div>
+              <% end %>
+              <p class="text-sm font-medium"><%= movie.title %></p>
+            </div>
+          </td>
+          <td class="px-4 py-3 text-sm text-neutral-400"><%= movie.tmdb_id %></td>
+          <td class="px-4 py-3">
+            <% case movie.status %>
+            <% when "now_playing" %>
+              <span class="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-xs font-medium">A l'affiche</span>
+            <% when "upcoming" %>
+              <span class="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-medium">A venir</span>
+            <% when "released" %>
+              <span class="px-2 py-0.5 rounded-full bg-neutral-500/20 text-neutral-400 text-xs font-medium">Sorti</span>
+            <% end %>
+          </td>
+          <td class="px-4 py-3 text-sm text-neutral-400"><%= movie.release_date ? l(movie.release_date, format: :short) : "-" %></td>
+          <td class="px-4 py-3 text-sm">
+            <span class="text-amber-500"><%= movie.vote_average ? number_with_precision(movie.vote_average, precision: 1) : "-" %></span>
+          </td>
+          <td class="px-4 py-3 text-sm"><%= movie.ratings_count %></td>
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-2">
+              <%= link_to "Voir", admin_content_movie_path(movie), class: "text-xs text-amber-500 hover:text-amber-400" %>
+              <%= button_to "Sync", sync_admin_content_movie_path(movie), method: :post, class: "text-xs text-blue-500 hover:text-blue-400" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="mt-6"><%== pagy_nav(@pagy) if @pagy.pages > 1 %></div>

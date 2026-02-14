@@ -1,0 +1,9 @@
+<%= turbo_stream.prepend "reviews" do %>
+  <%= render partial: "ratings/rating", locals: { rating: @rating } %>
+<% end %>
+<%= turbo_stream.replace "rating_form" do %>
+  <section id="rating_form">
+    <h2 class="text-lg font-bold mb-3"><%= t("ratings.your_rating") %></h2>
+    <%= render partial: "ratings/form", locals: { movie: @movie, rating: @rating } %>
+  </section>
+<% end %>

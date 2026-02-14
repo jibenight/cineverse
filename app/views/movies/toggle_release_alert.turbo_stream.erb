@@ -1,0 +1,7 @@
+<%= turbo_stream.replace "release_alert_button_#{@movie.id}" do %>
+  <div id="release_alert_button_<%= @movie.id %>">
+    <%= button_to @has_alert ? t("pages.movies.cancel_release_alert") : t("pages.movies.notify_release"),
+        toggle_release_alert_movie_path(@movie), method: :post,
+        class: "w-full py-2 rounded-lg text-sm font-medium border border-neutral-300 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition" %>
+  </div>
+<% end %>

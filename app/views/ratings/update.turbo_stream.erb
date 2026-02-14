@@ -1,0 +1,3 @@
+<%= turbo_stream.replace "rating_#{@rating.id}" do %>
+  <%= render partial: "ratings/rating", locals: { rating: @rating } %>
+<% end %>

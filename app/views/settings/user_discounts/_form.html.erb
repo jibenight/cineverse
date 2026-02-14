@@ -1,0 +1,39 @@
+<%= form_with model: discount, url: discount.persisted? ? settings_user_discount_path(discount) : settings_user_discounts_path, class: "space-y-4" do |f| %>
+  <% if discount.errors.any? %>
+    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+      <ul class="list-disc list-inside text-sm text-red-600 dark:text-red-400">
+        <% discount.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <label class="text-sm font-medium block mb-1">Type de r&eacute;duction</label>
+    <%= f.select :discount_type, UserDiscount.discount_types.keys.map { |t| [t.titleize.gsub("_", " "), t] }, { include_blank: "Choisir un type" }, class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
+  </div>
+
+  <div>
+    <label class="text-sm font-medium block mb-1">Libell&eacute;</label>
+    <%= f.text_field :label, placeholder: "Ex: Carte &eacute;tudiant, CE Entreprise...", class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
+  </div>
+
+  <div>
+    <label class="text-sm font-medium block mb-1">Description</label>
+    <%= f.text_area :description, rows: 3, placeholder: "D&eacute;tails sur la r&eacute;duction...", class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
+  </div>
+
+  <div class="flex items-center justify-between">
+    <div>
+      <p class="text-sm font-medium">Partageable</p>
+      <p class="text-xs text-neutral-400">Permettre aux autres utilisateurs de voir cette r&eacute;duction</p>
+    </div>
+    <%= f.check_box :shareable, class: "rounded border-neutral-300 dark:border-neutral-600 text-amber-500 focus:ring-amber-500" %>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <%= f.submit discount.persisted? ? "Mettre \u00e0 jour" : "Ajouter", class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition cursor-pointer" %>
+    <%= link_to "Annuler", settings_path, class: "px-4 py-2 rounded-lg bg-neutral-200 dark:bg-neutral-700 hover:bg-neutral-300 dark:hover:bg-neutral-600 text-sm font-medium transition" %>
+  </div>
+<% end %>

@@ -1,0 +1,7 @@
+<%= turbo_stream.remove "rating_#{@rating.id}" %>
+<%= turbo_stream.replace "rating_form" do %>
+  <section id="rating_form">
+    <h2 class="text-lg font-bold mb-3"><%= t("ratings.your_rating") %></h2>
+    <%= render partial: "ratings/form", locals: { movie: @movie, rating: Rating.new } %>
+  </section>
+<% end %>

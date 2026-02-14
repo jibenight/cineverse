@@ -1,0 +1,115 @@
+<% content_for(:title) { @movie.title } %>
+<% content_for(:page_title) { @movie.title } %>
+
+<div class="mb-6">
+  <%= link_to "← Retour aux films", admin_content_movies_path, class: "text-sm text-neutral-400 hover:text-amber-500" %>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- Movie Poster & Info -->
+  <div class="lg:col-span-1">
+    <div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+      <% if @movie.poster_path.present? %>
+        <img src="https://image.tmdb.org/t/p/w342<%= @movie.poster_path %>" alt="<%= @movie.title %>" class="w-full rounded-lg mb-4">
+      <% end %>
+
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between">
+          <span class="text-neutral-400">TMDb ID</span>
+          <span><%= @movie.tmdb_id %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Statut</span>
+          <% case @movie.status %>
+          <% when "now_playing" %>
+            <span class="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-xs font-medium">A l'affiche</span>
+          <% when "upcoming" %>
+            <span class="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-medium">A venir</span>
+          <% when "released" %>
+            <span class="px-2 py-0.5 rounded-full bg-neutral-500/20 text-neutral-400 text-xs font-medium">Sorti</span>
+          <% end %>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Date de sortie</span>
+          <span><%= @movie.release_date ? l(@movie.release_date, format: :long) : "-" %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Duree</span>
+          <span><%= @movie.runtime ? "#{@movie.runtime} min" : "-" %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Langue</span>
+          <span><%= @movie.original_language&.upcase %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Popularite</span>
+          <span><%= @movie.popularity ? number_with_precision(@movie.popularity, precision: 1) : "-" %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Note TMDb</span>
+          <span class="text-amber-500"><%= @movie.vote_average ? number_with_precision(@movie.vote_average, precision: 1) : "-" %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Note communaute</span>
+          <span class="text-amber-500"><%= @movie.community_rating || "-" %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Nombre de critiques</span>
+          <span><%= @movie.ratings_count %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Derniere MAJ</span>
+          <span><%= l(@movie.updated_at, format: :short) %></span>
+        </div>
+      </div>
+
+      <hr class="my-4 border-neutral-700">
+
+      <!-- Actions -->
+      <div class="space-y-2">
+        <%= button_to "Resynchroniser TMDb", sync_admin_content_movie_path(@movie), method: :post, class: "w-full py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition" %>
+        <%= button_to "Masquer le film", hide_admin_content_movie_path(@movie), method: :post, class: "w-full py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition", data: { turbo_confirm: "Masquer ce film ?" } %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Movie Details -->
+  <div class="lg:col-span-2 space-y-6">
+    <!-- Synopsis -->
+    <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+      <h3 class="text-sm font-semibold mb-3">Synopsis</h3>
+      <p class="text-sm text-neutral-400"><%= @movie.overview || "Aucun synopsis disponible." %></p>
+    </div>
+
+    <!-- Genres -->
+    <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+      <h3 class="text-sm font-semibold mb-3">Genres</h3>
+      <div class="flex flex-wrap gap-2">
+        <% @movie.genres.each do |genre| %>
+          <span class="px-2 py-1 rounded-full bg-neutral-800 text-neutral-400 text-xs"><%= genre.name %></span>
+        <% end %>
+        <% if @movie.genres.empty? %>
+          <span class="text-sm text-neutral-500">Aucun genre.</span>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Cast -->
+    <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+      <h3 class="text-sm font-semibold mb-3">Casting</h3>
+      <% if @movie.movie_cast_members.any? %>
+        <div class="grid grid-cols-2 gap-3">
+          <% @movie.movie_cast_members.includes(:cast_member).order(:order).limit(10).each do |mcm| %>
+            <div class="flex items-center gap-2 text-sm">
+              <span class="font-medium"><%= mcm.cast_member.name %></span>
+              <span class="text-neutral-500">-</span>
+              <span class="text-neutral-400"><%= mcm.character %></span>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <span class="text-sm text-neutral-500">Aucun casting.</span>
+      <% end %>
+    </div>
+  </div>
+</div>

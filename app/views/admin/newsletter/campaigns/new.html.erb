@@ -1,0 +1,10 @@
+<% content_for(:title) { "Nouvelle campagne" } %>
+<% content_for(:page_title) { "Nouvelle campagne" } %>
+
+<div class="mb-6">
+  <%= link_to "← Retour aux campagnes", admin_newsletter_campaigns_path, class: "text-sm text-neutral-400 hover:text-amber-500" %>
+</div>
+
+<div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+  <%= render "form", campaign: @campaign %>
+</div>

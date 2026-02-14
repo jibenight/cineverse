@@ -1,0 +1,41 @@
+<% content_for(:title) { "Modifier : #{@page.title}" } %>
+<% content_for(:page_title) { "Modifier : #{@page.title}" } %>
+
+<div class="mb-6">
+  <%= link_to "← Retour aux pages", admin_content_static_pages_path, class: "text-sm text-neutral-400 hover:text-amber-500" %>
+</div>
+
+<div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+  <%= form_with(model: [:admin, :content, @page], url: admin_content_static_page_path(@page), method: :patch, class: "space-y-6") do |f| %>
+    <% if @page.errors.any? %>
+      <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+        <p class="text-sm text-red-400 font-medium mb-2"><%= pluralize(@page.errors.count, "erreur") %> :</p>
+        <ul class="list-disc list-inside text-sm text-red-400">
+          <% @page.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div>
+      <p class="text-xs text-neutral-400 mb-1">Slug</p>
+      <p class="text-sm text-neutral-300"><%= @page.slug %></p>
+    </div>
+
+    <div>
+      <%= f.label :title, "Titre", class: "block text-sm font-medium text-neutral-400 mb-1" %>
+      <%= f.text_field :title, class: "w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent" %>
+    </div>
+
+    <div>
+      <%= f.label :body_html, "Contenu HTML", class: "block text-sm font-medium text-neutral-400 mb-1" %>
+      <%= f.text_area :body_html, rows: 20, class: "w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm font-mono focus:ring-2 focus:ring-amber-500 focus:border-transparent" %>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <%= f.submit "Enregistrer", class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition cursor-pointer" %>
+      <%= link_to "Annuler", admin_content_static_pages_path, class: "px-4 py-2 rounded-lg border border-neutral-600 text-sm hover:bg-neutral-800 transition" %>
+    </div>
+  <% end %>
+</div>

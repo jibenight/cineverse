@@ -1,0 +1,65 @@
+<% content_for(:title) { "Campagnes Newsletter" } %>
+<% content_for(:page_title) { "Campagnes Newsletter" } %>
+
+<div class="flex items-center justify-between mb-6">
+  <span class="text-sm text-neutral-400"><%= @campaigns.size %> campagnes</span>
+  <%= link_to "Nouvelle campagne", new_admin_newsletter_campaign_path, class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition" %>
+</div>
+
+<div class="bg-[#1A1A1A] rounded-lg border border-neutral-800 overflow-hidden">
+  <table class="w-full">
+    <thead>
+      <tr class="border-b border-neutral-800 text-left">
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Sujet</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Statut</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Envoye le</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Taux d'ouverture</th>
+        <th class="px-4 py-3 text-xs font-medium text-neutral-400 uppercase tracking-wider">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-neutral-800">
+      <% @campaigns.each do |campaign| %>
+        <tr class="hover:bg-neutral-800/50 transition">
+          <td class="px-4 py-3">
+            <p class="text-sm font-medium"><%= campaign.subject %></p>
+            <p class="text-xs text-neutral-500">par <%= campaign.created_by&.username %></p>
+          </td>
+          <td class="px-4 py-3">
+            <% case campaign.status %>
+            <% when "draft" %>
+              <span class="px-2 py-0.5 rounded-full bg-neutral-500/20 text-neutral-400 text-xs font-medium">Brouillon</span>
+            <% when "scheduled" %>
+              <span class="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-medium">Planifiee</span>
+            <% when "sending" %>
+              <span class="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-medium">En cours</span>
+            <% when "sent" %>
+              <span class="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-xs font-medium">Envoyee</span>
+            <% when "cancelled" %>
+              <span class="px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 text-xs font-medium">Annulee</span>
+            <% end %>
+          </td>
+          <td class="px-4 py-3 text-sm text-neutral-400">
+            <%= campaign.sent_at ? l(campaign.sent_at, format: :short) : "-" %>
+          </td>
+          <td class="px-4 py-3 text-sm">
+            <% if campaign.stats && campaign.stats.total_sent.to_i > 0 %>
+              <span class="text-amber-500"><%= number_to_percentage((campaign.stats.total_opened.to_f / campaign.stats.total_sent * 100), precision: 1) %></span>
+            <% else %>
+              <span class="text-neutral-500">-</span>
+            <% end %>
+          </td>
+          <td class="px-4 py-3">
+            <div class="flex items-center gap-2">
+              <%= link_to "Voir", admin_newsletter_campaign_path(campaign), class: "text-xs text-amber-500 hover:text-amber-400" %>
+              <% if campaign.draft? %>
+                <%= link_to "Modifier", edit_admin_newsletter_campaign_path(campaign), class: "text-xs text-neutral-400 hover:text-white" %>
+              <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="mt-6"><%== pagy_nav(@pagy) if @pagy.pages > 1 %></div>

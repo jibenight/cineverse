@@ -1,0 +1,112 @@
+<% content_for(:title) { @campaign.subject } %>
+<% content_for(:page_title) { "Campagne : #{@campaign.subject}" } %>
+
+<div class="mb-6">
+  <%= link_to "← Retour aux campagnes", admin_newsletter_campaigns_path, class: "text-sm text-neutral-400 hover:text-amber-500" %>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- Campaign Info -->
+  <div class="lg:col-span-2">
+    <div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold"><%= @campaign.subject %></h2>
+        <% case @campaign.status %>
+        <% when "draft" %>
+          <span class="px-2 py-0.5 rounded-full bg-neutral-500/20 text-neutral-400 text-xs font-medium">Brouillon</span>
+        <% when "scheduled" %>
+          <span class="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-medium">Planifiee</span>
+        <% when "sending" %>
+          <span class="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-medium">En cours</span>
+        <% when "sent" %>
+          <span class="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-xs font-medium">Envoyee</span>
+        <% when "cancelled" %>
+          <span class="px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 text-xs font-medium">Annulee</span>
+        <% end %>
+      </div>
+
+      <div class="space-y-3 text-sm mb-6">
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Creee par</span>
+          <span><%= @campaign.created_by&.username %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Creee le</span>
+          <span><%= l(@campaign.created_at, format: :long) %></span>
+        </div>
+        <% if @campaign.scheduled_at.present? %>
+          <div class="flex justify-between">
+            <span class="text-neutral-400">Planifiee pour</span>
+            <span><%= l(@campaign.scheduled_at, format: :long) %></span>
+          </div>
+        <% end %>
+        <% if @campaign.sent_at.present? %>
+          <div class="flex justify-between">
+            <span class="text-neutral-400">Envoyee le</span>
+            <span><%= l(@campaign.sent_at, format: :long) %></span>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Email Content Preview -->
+      <div class="border border-neutral-700 rounded-lg p-4">
+        <p class="text-xs text-neutral-400 mb-2">Apercu du contenu</p>
+        <div class="prose prose-sm prose-invert max-w-none">
+          <%= @campaign.body_html&.html_safe %>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-3 mt-6">
+        <% if @campaign.draft? %>
+          <%= link_to "Modifier", edit_admin_newsletter_campaign_path(@campaign), class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition" %>
+          <%= button_to "Envoyer", send_campaign_admin_newsletter_campaign_path(@campaign), method: :post, class: "px-4 py-2 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-medium transition", data: { turbo_confirm: "Envoyer cette campagne ?" } %>
+        <% end %>
+        <%= link_to "Apercu", preview_admin_newsletter_campaign_path(@campaign), class: "px-4 py-2 rounded-lg border border-neutral-600 text-sm hover:bg-neutral-800 transition", target: "_blank" %>
+        <%= button_to "Dupliquer", duplicate_admin_newsletter_campaign_path(@campaign), method: :post, class: "px-4 py-2 rounded-lg border border-neutral-600 text-sm hover:bg-neutral-800 transition" %>
+        <% if @campaign.draft? || @campaign.scheduled? %>
+          <%= button_to "Annuler", cancel_admin_newsletter_campaign_path(@campaign), method: :post, class: "px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition", data: { turbo_confirm: "Annuler cette campagne ?" } %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Sidebar -->
+  <div class="lg:col-span-1">
+    <div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+      <h3 class="text-sm font-semibold mb-4">Statistiques</h3>
+      <% if @stats.present? %>
+        <div class="space-y-4">
+          <div>
+            <p class="text-xs text-neutral-400 uppercase tracking-wider">Envoyes</p>
+            <p class="text-2xl font-bold mt-1"><%= number_with_delimiter(@stats.total_sent) %></p>
+          </div>
+          <div>
+            <p class="text-xs text-neutral-400 uppercase tracking-wider">Ouverts</p>
+            <p class="text-2xl font-bold mt-1 text-green-400"><%= number_with_delimiter(@stats.total_opened) %></p>
+            <% if @stats.total_sent.to_i > 0 %>
+              <p class="text-xs text-neutral-500"><%= number_to_percentage((@stats.total_opened.to_f / @stats.total_sent * 100), precision: 1) %></p>
+            <% end %>
+          </div>
+          <div>
+            <p class="text-xs text-neutral-400 uppercase tracking-wider">Cliques</p>
+            <p class="text-2xl font-bold mt-1 text-amber-500"><%= number_with_delimiter(@stats.total_clicked) %></p>
+            <% if @stats.total_sent.to_i > 0 %>
+              <p class="text-xs text-neutral-500"><%= number_to_percentage((@stats.total_clicked.to_f / @stats.total_sent * 100), precision: 1) %></p>
+            <% end %>
+          </div>
+          <div>
+            <p class="text-xs text-neutral-400 uppercase tracking-wider">Bounces</p>
+            <p class="text-2xl font-bold mt-1 text-red-400"><%= number_with_delimiter(@stats.total_bounced) %></p>
+          </div>
+          <div>
+            <p class="text-xs text-neutral-400 uppercase tracking-wider">Desinscrits</p>
+            <p class="text-2xl font-bold mt-1 text-neutral-400"><%= number_with_delimiter(@stats.total_unsubscribed) %></p>
+          </div>
+        </div>
+      <% else %>
+        <p class="text-sm text-neutral-500">Aucune statistique disponible.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

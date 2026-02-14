@@ -18,6 +18,26 @@ module Admin
       }
 
       @stats = AdminDailyStat.where("date >= ?", @start_date).order(date: :asc)
+
+      # KPI card variables
+      @total_users = User.count
+      @new_users_today = User.where(created_at: Date.current.all_day).count
+      @total_ratings = Rating.count
+      @new_ratings_today = Rating.where(created_at: Date.current.all_day).count
+      @total_movies = Movie.count
+      @upcoming_movies_count = Movie.upcoming.count
+      @total_revenue = AffiliateClick.count * 0.25
+      @clicks_today = AffiliateClick.where(clicked_at: Date.current.all_day).count
+
+      # Chart data
+      @registrations_by_day = User.where(created_at: @start_date..).group_by_day(:created_at).count
+      @ratings_by_day = Rating.where(created_at: @start_date..).group_by_day(:created_at).count
+
+      # Recent activities
+      @recent_activities = AdminAuditLog.includes(:admin).order(created_at: :desc).limit(10)
+
+      # Pending reports
+      @pending_reports = Report.pending_review.includes(:reporter).order(created_at: :desc).limit(5)
     end
 
     private

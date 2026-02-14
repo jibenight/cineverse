@@ -14,6 +14,10 @@ module Admin
         @campaign = NewsletterCampaign.new
       end
 
+      def edit
+        @campaign = NewsletterCampaign.find(params[:id])
+      end
+
       def create
         @campaign = NewsletterCampaign.new(campaign_params.merge(created_by: current_user, status: :draft))
         if @campaign.save

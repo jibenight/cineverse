@@ -107,9 +107,9 @@
       <% if @recent_activities.present? %>
         <% @recent_activities.each do |activity| %>
           <div class="flex items-center gap-3 text-sm">
-            <div class="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-bold"><%= activity.user&.username&.first&.upcase %></div>
+            <div class="w-8 h-8 rounded-full bg-neutral-800 flex items-center justify-center text-xs font-bold"><%= activity.admin&.username&.first&.upcase %></div>
             <div class="flex-1 min-w-0">
-              <p class="truncate"><%= activity.description %></p>
+              <p class="truncate"><%= activity.action %></p>
               <span class="text-xs text-neutral-500"><%= time_ago_in_words(activity.created_at) %></span>
             </div>
           </div>

@@ -1,0 +1,7 @@
+<%= turbo_stream.replace "watchlist_button_#{@movie.id}" do %>
+  <div id="watchlist_button_<%= @movie.id %>">
+    <%= button_to @in_watchlist ? t("pages.movies.remove_from_watchlist") : t("pages.movies.add_to_watchlist"),
+        toggle_watchlist_movie_path(@movie), method: :post,
+        class: "w-full py-2 rounded-lg text-sm font-medium transition #{@in_watchlist ? 'bg-amber-500 text-white' : 'border border-neutral-300 dark:border-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-800'}" %>
+  </div>
+<% end %>

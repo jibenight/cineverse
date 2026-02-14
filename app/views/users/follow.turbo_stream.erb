@@ -1,0 +1,5 @@
+<%= turbo_stream.replace "follow_button_#{@user.id}" do %>
+  <div id="follow_button_<%= @user.id %>">
+    <%= button_to "Se desabonner", unfollow_user_path(@user.username), method: :delete, class: "px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition" %>
+  </div>
+<% end %>

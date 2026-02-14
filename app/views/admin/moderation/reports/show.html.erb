@@ -1,0 +1,132 @@
+<% content_for(:title) { "Signalement ##{@report.id}" } %>
+<% content_for(:page_title) { "Signalement ##{@report.id}" } %>
+
+<div class="mb-6">
+  <%= link_to "← Retour aux signalements", admin_moderation_reports_path, class: "text-sm text-neutral-400 hover:text-amber-500" %>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- Report Details -->
+  <div class="lg:col-span-2 space-y-6">
+    <!-- Report Info -->
+    <div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+      <div class="flex items-center gap-3 mb-4">
+        <h2 class="text-lg font-bold">Signalement #<%= @report.id %></h2>
+        <% case @report.status %>
+        <% when "pending" %>
+          <span class="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-medium">En attente</span>
+        <% when "reviewed" %>
+          <span class="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-medium">Examine</span>
+        <% when "resolved" %>
+          <span class="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-xs font-medium">Resolu</span>
+        <% when "dismissed" %>
+          <span class="px-2 py-0.5 rounded-full bg-neutral-500/20 text-neutral-400 text-xs font-medium">Rejete</span>
+        <% end %>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Motif</span>
+          <span class="font-medium"><%= @report.reason %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Signale par</span>
+          <% if @report.reporter.present? %>
+            <%= link_to @report.reporter.username, admin_user_path(@report.reporter), class: "text-amber-500 hover:text-amber-400" %>
+          <% else %>
+            <span class="text-neutral-500">Utilisateur supprime</span>
+          <% end %>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Type de contenu</span>
+          <span><%= @report.reportable_type %></span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-neutral-400">Date</span>
+          <span><%= l(@report.created_at, format: :long) %></span>
+        </div>
+        <% if @report.reviewed_by.present? %>
+          <div class="flex justify-between">
+            <span class="text-neutral-400">Traite par</span>
+            <span><%= @report.reviewed_by.username %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-neutral-400">Traite le</span>
+            <span><%= l(@report.reviewed_at, format: :short) %></span>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @report.description.present? %>
+        <div class="mt-4 pt-4 border-t border-neutral-700">
+          <p class="text-xs text-neutral-400 mb-1">Description</p>
+          <p class="text-sm"><%= @report.description %></p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Reported Content -->
+    <% if @report.reportable.present? %>
+      <div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+        <h3 class="text-sm font-semibold mb-3">Contenu signale</h3>
+        <div class="p-4 rounded-lg bg-neutral-800/50 border border-neutral-700">
+          <% if @report.reportable.respond_to?(:review_text) %>
+            <% if @report.reportable.respond_to?(:movie) && @report.reportable.movie.present? %>
+              <p class="text-xs text-neutral-400 mb-1">Critique de : <strong><%= @report.reportable.movie.title %></strong></p>
+              <p class="text-xs text-amber-500 mb-2">Note : <%= @report.reportable.score %>/5</p>
+            <% end %>
+            <p class="text-sm"><%= @report.reportable.review_text %></p>
+          <% elsif @report.reportable.respond_to?(:body) %>
+            <p class="text-sm"><%= @report.reportable.body %></p>
+          <% else %>
+            <p class="text-sm text-neutral-500">Apercu non disponible pour ce type de contenu.</p>
+          <% end %>
+          <% if @report.reportable.respond_to?(:user) && @report.reportable.user.present? %>
+            <p class="text-xs text-neutral-500 mt-2">par <%= link_to @report.reportable.user.username, admin_user_path(@report.reportable.user), class: "text-amber-500 hover:text-amber-400" %></p>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Actions Sidebar -->
+  <div class="lg:col-span-1">
+    <div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+      <h3 class="text-sm font-semibold mb-4">Actions de moderation</h3>
+      <% if @report.pending? %>
+        <div class="space-y-3">
+          <!-- Dismiss -->
+          <%= button_to "Rejeter le signalement", dismiss_admin_moderation_report_path(@report), method: :post, class: "w-full py-2 rounded-lg border border-neutral-600 text-sm hover:bg-neutral-800 transition" %>
+
+          <!-- Hide Content -->
+          <% if @report.reportable.present? %>
+            <%= button_to "Masquer le contenu", hide_content_admin_moderation_report_path(@report), method: :post, class: "w-full py-2 rounded-lg bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium transition", data: { turbo_confirm: "Masquer ce contenu ?" } %>
+          <% end %>
+
+          <!-- Delete Content -->
+          <% if @report.reportable.present? %>
+            <%= button_to "Supprimer le contenu", delete_content_admin_moderation_report_path(@report), method: :post, class: "w-full py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition", data: { turbo_confirm: "Supprimer definitivement ce contenu ?" } %>
+          <% end %>
+
+          <hr class="border-neutral-700">
+
+          <p class="text-xs text-neutral-400 uppercase tracking-wider">Actions sur l'utilisateur</p>
+
+          <!-- Warn User -->
+          <%= button_to "Avertir l'utilisateur", warn_user_admin_moderation_report_path(@report), method: :post, class: "w-full py-2 rounded-lg border border-yellow-600 text-yellow-500 text-sm font-medium hover:bg-yellow-600/10 transition" %>
+
+          <!-- Mute User -->
+          <%= button_to "Muter l'utilisateur (24h)", mute_user_admin_moderation_report_path(@report, duration: "twenty_four_hours"), method: :post, class: "w-full py-2 rounded-lg border border-orange-600 text-orange-500 text-sm font-medium hover:bg-orange-600/10 transition", data: { turbo_confirm: "Muter cet utilisateur pour 24h ?" } %>
+
+          <!-- Ban User -->
+          <%= button_to "Bannir l'utilisateur", ban_user_admin_moderation_report_path(@report), method: :post, class: "w-full py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium transition", data: { turbo_confirm: "Bannir definitivement cet utilisateur ?" } %>
+        </div>
+      <% else %>
+        <p class="text-sm text-neutral-500">Ce signalement a deja ete traite.</p>
+        <% if @report.reviewed_by.present? %>
+          <p class="text-xs text-neutral-500 mt-2">Par <%= @report.reviewed_by.username %> le <%= l(@report.reviewed_at, format: :short) %></p>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>

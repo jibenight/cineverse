@@ -1,0 +1,35 @@
+<% content_for(:title) { "Statut Newsletter" } %>
+<% content_for(:page_title) { "Statut Newsletter" } %>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+  <!-- Active Subscribers -->
+  <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+    <p class="text-xs text-neutral-400 uppercase tracking-wider">Abonnes actifs</p>
+    <p class="text-2xl font-bold mt-1 text-green-400"><%= number_with_delimiter(@active_subscribers) %></p>
+  </div>
+
+  <!-- Pending Subscribers -->
+  <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+    <p class="text-xs text-neutral-400 uppercase tracking-wider">En attente de confirmation</p>
+    <p class="text-2xl font-bold mt-1 text-yellow-400"><%= number_with_delimiter(@pending_subscribers) %></p>
+  </div>
+
+  <!-- Last Campaign -->
+  <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+    <p class="text-xs text-neutral-400 uppercase tracking-wider">Derniere campagne envoyee</p>
+    <% if @last_campaign.present? %>
+      <p class="text-lg font-bold mt-1"><%= @last_campaign.subject.truncate(40) %></p>
+      <p class="text-xs text-neutral-500 mt-1"><%= l(@last_campaign.sent_at, format: :short) %></p>
+    <% else %>
+      <p class="text-2xl font-bold mt-1 text-neutral-500">-</p>
+    <% end %>
+  </div>
+</div>
+
+<div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+  <h3 class="text-sm font-semibold mb-4">Liens rapides</h3>
+  <div class="flex items-center gap-3">
+    <%= link_to "Gerer les campagnes", admin_newsletter_campaigns_path, class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition" %>
+    <%= link_to "Gerer les abonnes", admin_newsletter_subscribers_path, class: "px-4 py-2 rounded-lg border border-neutral-600 text-sm hover:bg-neutral-800 transition" %>
+  </div>
+</div>

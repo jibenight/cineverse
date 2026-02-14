@@ -1,0 +1,37 @@
+<%= form_with(model: [:admin, :newsletter, campaign], class: "space-y-6") do |f| %>
+  <% if campaign.errors.any? %>
+    <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+      <p class="text-sm text-red-400 font-medium mb-2"><%= pluralize(campaign.errors.count, "erreur") %> :</p>
+      <ul class="list-disc list-inside text-sm text-red-400">
+        <% campaign.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :subject, "Sujet", class: "block text-sm font-medium text-neutral-400 mb-1" %>
+    <%= f.text_field :subject, class: "w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent", placeholder: "Sujet de l'email" %>
+  </div>
+
+  <div>
+    <%= f.label :body_html, "Contenu HTML", class: "block text-sm font-medium text-neutral-400 mb-1" %>
+    <%= f.text_area :body_html, rows: 15, class: "w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm font-mono focus:ring-2 focus:ring-amber-500 focus:border-transparent", placeholder: "<h1>Titre</h1><p>Contenu...</p>" %>
+  </div>
+
+  <div>
+    <%= f.label :body_text, "Contenu texte (optionnel)", class: "block text-sm font-medium text-neutral-400 mb-1" %>
+    <%= f.text_area :body_text, rows: 5, class: "w-full px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm font-mono focus:ring-2 focus:ring-amber-500 focus:border-transparent", placeholder: "Version texte brut..." %>
+  </div>
+
+  <div>
+    <%= f.label :scheduled_at, "Planifier l'envoi (optionnel)", class: "block text-sm font-medium text-neutral-400 mb-1" %>
+    <%= f.datetime_local_field :scheduled_at, class: "px-4 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent" %>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <%= f.submit campaign.persisted? ? "Mettre a jour" : "Creer la campagne", class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition cursor-pointer" %>
+    <%= link_to "Annuler", admin_newsletter_campaigns_path, class: "px-4 py-2 rounded-lg border border-neutral-600 text-sm hover:bg-neutral-800 transition" %>
+  </div>
+<% end %>

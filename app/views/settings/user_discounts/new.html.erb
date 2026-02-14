@@ -1,0 +1,12 @@
+<% content_for(:title) { "Ajouter une r\u00e9duction" } %>
+<div class="max-w-3xl mx-auto px-6 py-8">
+  <%= link_to settings_path, class: "inline-flex items-center gap-1 text-sm text-neutral-400 hover:text-amber-500 mb-6" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+    Retour aux param&egrave;tres
+  <% end %>
+
+  <section class="bg-white dark:bg-[#1A1A1A] rounded-lg p-6 shadow-sm">
+    <h1 class="text-lg font-bold mb-4">Ajouter une r&eacute;duction</h1>
+    <%= render "form", discount: @discount %>
+  </section>
+</div>

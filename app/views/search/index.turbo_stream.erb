@@ -1,0 +1,14 @@
+<%= turbo_stream.replace "search_results" do %>
+  <div id="search_results">
+    <% if @movies&.any? %>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <% @movies.each do |movie| %>
+          <%= render MovieCardComponent.new(movie: movie) %>
+        <% end %>
+      </div>
+      <div class="mt-8"><%== pagy_nav(@pagy) if @pagy&.pages.to_i > 1 %></div>
+    <% elsif @query.present? %>
+      <p class="text-neutral-400 text-center py-12"><%= t("general.no_results") %></p>
+    <% end %>
+  </div>
+<% end %>
