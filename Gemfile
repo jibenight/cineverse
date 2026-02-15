@@ -24,7 +24,7 @@ gem "omniauth-apple", "~> 1.3"
 gem "omniauth-rails_csrf_protection", "~> 1.0"
 
 # Background Jobs
-gem "sidekiq", "~> 7.2"
+gem "sidekiq", "~> 8.1"
 gem "sidekiq-cron", "~> 1.12"
 
 # Pagination
