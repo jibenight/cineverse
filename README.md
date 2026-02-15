@@ -4,18 +4,18 @@ Plateforme sociale de cinéma construite avec Ruby on Rails. Découvrez des film
 
 ## Stack technique
 
-- **Backend :** Ruby 3.4.8, Rails 7.2, PostgreSQL
+- **Backend :** Ruby 3.4.8, Rails 8.1, PostgreSQL
 - **Frontend :** Hotwire (Turbo + Stimulus), TailwindCSS, esbuild
 - **Temps réel :** ActionCable + Redis
 - **Jobs :** Sidekiq + sidekiq-cron
-- **Auth :** Devise (+ 2FA pour admins)
+- **Auth :** Devise 5.0 (+ 2FA pour admins)
 - **Autorisations :** Pundit
 - **API externe :** TMDb (The Movie Database)
 
 ## Prérequis
 
 - Ruby 3.4.8 (via [rbenv](https://github.com/rbenv/rbenv))
-- Node.js 20.x + Yarn
+- Node.js 20.x + npm
 - PostgreSQL 14+
 - Redis 7+
 
@@ -27,7 +27,7 @@ git clone <repo-url> && cd cineverse
 
 # Installer les dépendances
 bundle install
-yarn install
+npm install
 
 # Configurer les variables d'environnement
 cp .env.example .env
@@ -37,7 +37,7 @@ cp .env.example .env
 bin/rails db:create db:migrate db:seed
 ```
 
-Le seed crée un compte admin (`admin@cineverse.fr` / `password123`), 10 utilisateurs, des films, genres, badges et pages statiques.
+Le seed crée un compte admin (`admin@cineverse.fr` / `password123456`), 10 utilisateurs, des films, genres, badges et pages statiques.
 
 ## Lancer le projet
 
@@ -47,8 +47,8 @@ bin/dev
 
 # Ou séparément
 bin/rails server
-yarn build --watch
-yarn build:css --watch
+npm run build -- --watch
+npm run build:css -- --watch
 ```
 
 L'application est accessible sur `http://localhost:3000`.
@@ -64,14 +64,14 @@ Interface web Sidekiq disponible sur `/admin/sidekiq` (accès admin requis).
 ## Tests
 
 ```bash
-# Suite complète (367 specs)
+# Suite complète (366 specs)
 bundle exec rspec
 
 # Par catégorie
-bundle exec rspec spec/models/        # 237 specs modèles
-bundle exec rspec spec/services/      # 30 specs services
-bundle exec rspec spec/policies/      # 54 specs policies
-bundle exec rspec spec/requests/      # 46 specs requêtes
+bundle exec rspec spec/models/        # Specs modèles
+bundle exec rspec spec/services/      # Specs services
+bundle exec rspec spec/policies/      # Specs policies
+bundle exec rspec spec/requests/      # Specs requêtes
 
 # Fichier ou ligne spécifique
 bundle exec rspec spec/models/user_spec.rb
@@ -89,8 +89,9 @@ bundle exec brakeman          # Analyse de sécurité
 ## Fonctionnalités
 
 ### Films
-- Catalogue avec données TMDb (synchronisation automatique toutes les 6h)
-- Pages "A l'affiche", "Prochainement", "Tendances", calendrier des sorties
+- Catalogue avec données TMDb (synchronisation automatique toutes les 6h, région France)
+- Pages "En salle", "Prochainement", "Tendances", calendrier des sorties
+- Recherche locale avec fallback TMDb et import automatique
 - Système de notes (0.5 - 5 étoiles) avec critiques et spoilers
 - Watchlist personnelle avec réorganisation drag & drop
 - Alertes de sortie
