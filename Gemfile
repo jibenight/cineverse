@@ -4,7 +4,7 @@ ruby "3.4.8"
 
 gem "rails", "~> 8.1.0"
 gem "pg", "~> 1.5"
-gem "puma", "~> 6.0"
+gem "puma", "~> 7.2"
 gem "sprockets-rails"
 gem "jsbundling-rails"
 gem "turbo-rails"
