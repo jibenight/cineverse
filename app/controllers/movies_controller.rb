@@ -1,6 +1,6 @@
 class MoviesController < ApplicationController
   before_action :authenticate_user!, only: [:toggle_watchlist, :toggle_release_alert]
-  skip_after_action :verify_authorized, only: [:index, :show, :now_playing, :upcoming, :trending, :calendar]
+  skip_after_action :verify_authorized, only: [:index, :show, :now_playing, :upcoming, :trending, :calendar, :import_tmdb]
   skip_after_action :verify_policy_scoped, except: [:index]
 
   def index
@@ -30,11 +30,22 @@ class MoviesController < ApplicationController
       .group("movies.id")
       .order("COUNT(ratings.id) DESC")
       .limit(20)
+
+    @movies = Movie.order(popularity: :desc).limit(20) if @movies.empty?
   end
 
   def calendar
     @month = params[:month] ? Date.parse(params[:month]) : Date.current.beginning_of_month
     @movies = Movie.where(release_date: @month..@month.end_of_month).order(release_date: :asc)
+  end
+
+  def import_tmdb
+    movie = TmdbSyncService.new.sync_movie_details(params[:tmdb_id])
+    if movie
+      redirect_to movie, notice: t("pages.movies.imported_successfully")
+    else
+      redirect_to search_path, alert: t("pages.movies.import_failed")
+    end
   end
 
   def toggle_watchlist

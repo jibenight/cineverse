@@ -28,6 +28,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # Import from TMDb
+  post "movies/import/:tmdb_id", to: "movies#import_tmdb", as: :import_tmdb_movie
+
   # Movie sections
   get "now-playing", to: "movies#now_playing", as: :now_playing
   get "upcoming", to: "movies#upcoming", as: :upcoming_movies

@@ -112,6 +112,8 @@ fr:
       book_ticket: "Réserver ma place"
       view_sessions: "Voir les séances"
       included_pass: "Accès inclus avec votre pass %{provider}"
+      imported_successfully: "Film importé avec succès !"
+      import_failed: "Impossible d'importer ce film."
       invite_friend: "Invitez un ami ! Votre pass inclut un accompagnant"
       commercial_links: "Liens commerciaux"
       cast: "Casting"

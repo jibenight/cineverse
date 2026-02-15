@@ -6,12 +6,12 @@ class SearchController < ApplicationController
     @query = params[:q].to_s.strip
     return if @query.blank?
 
-    if params[:source] == "tmdb"
-      @results = TmdbSyncService.new.search(@query, page: params[:page] || 1)
-    else
-      @pagy, @movies = pagy(
-        Movie.where("title ILIKE ?", "%#{Movie.sanitize_sql_like(@query)}%").order(popularity: :desc)
-      )
+    @pagy, @movies = pagy(
+      Movie.where("title ILIKE ?", "%#{Movie.sanitize_sql_like(@query)}%").order(popularity: :desc)
+    )
+
+    if @movies.empty?
+      @tmdb_results = TmdbSyncService.new.search(@query, page: params[:page] || 1)
     end
 
     respond_to do |format|

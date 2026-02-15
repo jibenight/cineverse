@@ -141,7 +141,7 @@ class TmdbSyncService
   def fetch(endpoint, **params)
     HTTParty.get(
       "#{BASE_URL}#{endpoint}",
-      query: params.merge(api_key: @api_key, language: "fr-FR"),
+      query: params.merge(api_key: @api_key, language: "fr-FR", region: "FR"),
       timeout: 10
     )
   end
