@@ -269,9 +269,23 @@ Devise.setup do |config|
   config.sign_out_via = :delete
 
   # ==> OmniAuth
-  # Add a new OmniAuth provider. Check the wiki for more information on setting
-  # up on your models and hooks.
-  # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
+  config.omniauth :google_oauth2,
+                  ENV["GOOGLE_CLIENT_ID"],
+                  ENV["GOOGLE_CLIENT_SECRET"],
+                  scope: "email,profile"
+
+  config.omniauth :github,
+                  ENV["GITHUB_CLIENT_ID"],
+                  ENV["GITHUB_CLIENT_SECRET"],
+                  scope: "user:email"
+
+  config.omniauth :apple,
+                  ENV["APPLE_CLIENT_ID"],
+                  "",
+                  scope: "email name",
+                  team_id: ENV["APPLE_TEAM_ID"],
+                  key_id: ENV["APPLE_KEY_ID"],
+                  pem: ENV["APPLE_PRIVATE_KEY"]
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

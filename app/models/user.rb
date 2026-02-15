@@ -1,7 +1,8 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :confirmable, :trackable
+         :confirmable, :trackable,
+         :omniauthable, omniauth_providers: [:google_oauth2, :github, :apple]
 
   has_one_attached :avatar
 
@@ -71,6 +72,49 @@ class User < ApplicationRecord
 
   def following_count
     following.count
+  end
+
+  # OmniAuth
+  def self.from_omniauth(auth)
+    # Find existing user by provider+uid
+    user = find_by(provider: auth.provider, uid: auth.uid)
+    return user if user
+
+    # Try to link to existing account by email
+    email = auth.info.email
+    user = find_by(email: email) if email.present?
+
+    if user
+      user.update!(provider: auth.provider, uid: auth.uid)
+      return user
+    end
+
+    # Create new user
+    create!(
+      provider: auth.provider,
+      uid: auth.uid,
+      email: email,
+      username: generate_unique_username(auth.info.name || auth.info.nickname),
+      password: Devise.friendly_token(32),
+      confirmed_at: Time.current
+    )
+  end
+
+  def self.generate_unique_username(name)
+    base = name.to_s.parameterize(separator: "_").first(20).presence || "user"
+    username = base
+    counter = 1
+
+    while exists?(username: username)
+      username = "#{base}_#{counter}"
+      counter += 1
+    end
+
+    username
+  end
+
+  def password_required?
+    provider.blank? && super
   end
 
 end

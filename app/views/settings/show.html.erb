@@ -57,6 +57,20 @@
       <% end %>
     </section>
 
+    <!-- Connected Accounts -->
+    <% if current_user.provider.present? %>
+      <section class="bg-white dark:bg-[#1A1A1A] rounded-lg p-6 shadow-sm">
+        <h2 class="text-lg font-bold mb-4">Comptes connectés</h2>
+        <div class="flex items-center gap-3">
+          <%= render "shared/icons/#{current_user.provider == 'google_oauth2' ? 'google' : current_user.provider}" %>
+          <div>
+            <p class="text-sm font-medium"><%= helpers.omniauth_provider_label(current_user.provider) %></p>
+            <p class="text-xs text-neutral-400">Connecté via <%= helpers.omniauth_provider_label(current_user.provider) %></p>
+          </div>
+        </div>
+      </section>
+    <% end %>
+
     <!-- Danger Zone -->
     <section class="bg-white dark:bg-[#1A1A1A] rounded-lg p-6 shadow-sm border border-red-200 dark:border-red-900/50">
       <h2 class="text-lg font-bold mb-4 text-red-500">Zone de danger</h2>

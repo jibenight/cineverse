@@ -132,4 +132,90 @@ RSpec.describe User, type: :model do
       expect(user.following?(other_user)).to be false
     end
   end
+
+  describe ".from_omniauth" do
+    let(:auth) do
+      OmniAuth::AuthHash.new(
+        provider: "google_oauth2",
+        uid: "123456",
+        info: OmniAuth::AuthHash::InfoHash.new(
+          email: "oauth@example.com",
+          name: "Jean Dupont"
+        )
+      )
+    end
+
+    context "when user with provider+uid exists" do
+      let!(:existing_user) { create(:user, :google_oauth, uid: "123456") }
+
+      it "returns the existing user" do
+        user = User.from_omniauth(auth)
+        expect(user).to eq(existing_user)
+      end
+    end
+
+    context "when user with same email exists" do
+      let!(:existing_user) { create(:user, email: "oauth@example.com") }
+
+      it "links the provider and returns the user" do
+        user = User.from_omniauth(auth)
+        expect(user).to eq(existing_user)
+        expect(user.provider).to eq("google_oauth2")
+        expect(user.uid).to eq("123456")
+      end
+    end
+
+    context "when no matching user exists" do
+      it "creates a new user" do
+        expect { User.from_omniauth(auth) }.to change(User, :count).by(1)
+      end
+
+      it "sets the provider and uid" do
+        user = User.from_omniauth(auth)
+        expect(user.provider).to eq("google_oauth2")
+        expect(user.uid).to eq("123456")
+        expect(user.email).to eq("oauth@example.com")
+      end
+
+      it "generates a username from the name" do
+        user = User.from_omniauth(auth)
+        expect(user.username).to start_with("jean_dupont")
+      end
+
+      it "confirms the user automatically" do
+        user = User.from_omniauth(auth)
+        expect(user.confirmed_at).to be_present
+      end
+    end
+  end
+
+  describe ".generate_unique_username" do
+    it "returns a parameterized username" do
+      username = User.generate_unique_username("Jean Dupont")
+      expect(username).to eq("jean_dupont")
+    end
+
+    it "appends a counter when username is taken" do
+      create(:user, username: "jean_dupont")
+      username = User.generate_unique_username("Jean Dupont")
+      expect(username).to eq("jean_dupont_1")
+    end
+
+    it "falls back to 'user' for blank names" do
+      username = User.generate_unique_username("")
+      expect(username).to eq("user")
+    end
+  end
+
+  describe "#password_required?" do
+    it "returns false for OAuth users" do
+      user = build(:user, :google_oauth)
+      expect(user.password_required?).to be false
+    end
+
+    it "returns true for standard users" do
+      user = build(:user, provider: nil)
+      expect(user.password_required?).to be true
+    end
+  end
 end
