@@ -2,9 +2,9 @@
   <img src="<%= avatar_url %>" alt="<%= @message.user.username %>" class="w-8 h-8 rounded-full flex-shrink-0">
   <div class="max-w-[70%]">
     <% unless own_message? %>
-      <span class="text-xs text-neutral-500 dark:text-neutral-400 mb-1 block"><%= @message.user.username %></span>
+      <span class="text-xs text-neutral-500 dark:text-cv-muted mb-1 block"><%= @message.user.username %></span>
     <% end %>
-    <div class="rounded-lg p-3 <%= own_message? ? 'bg-amber-500 text-white' : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100' %>">
+    <div class="rounded-lg p-3 <%= own_message? ? 'bg-amber-500 text-white' : 'bg-neutral-100 dark:bg-cv-hover text-neutral-900 dark:text-cv-text' %>">
       <% case @message.message_type %>
       <% when "text" %>
         <p class="text-sm"><%= @message.body %></p>

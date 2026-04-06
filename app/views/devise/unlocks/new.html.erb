@@ -3,11 +3,11 @@
 <div class="flex items-center justify-center min-h-[80vh] px-4">
   <div class="w-full max-w-md">
     <div class="text-center mb-8">
-      <h1 class="text-3xl font-display font-bold text-amber-500">CinéVerse</h1>
-      <p class="text-neutral-500 dark:text-neutral-400 mt-2">Renvoyer les instructions de déverrouillage</p>
+      <h1 class="text-3xl font-sans font-bold text-amber-500">CinéVerse</h1>
+      <p class="text-neutral-500 dark:text-cv-muted mt-2">Renvoyer les instructions de déverrouillage</p>
     </div>
 
-    <div class="bg-white dark:bg-[#1A1A1A] rounded-2xl border border-neutral-200 dark:border-neutral-800 p-8">
+    <div class="bg-white dark:bg-cv-surface rounded-2xl border border-neutral-200 dark:border-cv-border p-8">
       <%= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
         <%= render "devise/shared/error_messages", resource: resource %>
 
@@ -15,7 +15,7 @@
           <div>
             <%= f.label :email, "Email", class: "block text-sm font-medium mb-1.5" %>
             <%= f.email_field :email, autofocus: true, autocomplete: "email",
-                class: "w-full px-4 py-2.5 rounded-lg bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition" %>
+                class: "w-full px-4 py-2.5 rounded-lg bg-neutral-50 dark:bg-cv-surface border border-neutral-200 dark:border-cv-border text-sm focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition" %>
           </div>
 
           <div>
@@ -24,7 +24,7 @@
         </div>
       <% end %>
 
-      <div class="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
+      <div class="mt-6 pt-6 border-t border-neutral-200 dark:border-cv-border">
         <%= render "devise/shared/links" %>
       </div>
     </div>

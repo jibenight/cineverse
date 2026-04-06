@@ -3,7 +3,7 @@
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
   <% @checks.each do |name, check| %>
-    <div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+    <div class="bg-cv-surface rounded-xl p-6 border border-cv-border">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-sm font-semibold uppercase"><%= name %></h3>
         <% if check[:status] == "ok" %>
@@ -14,7 +14,7 @@
       </div>
       <div class="space-y-2">
         <div class="flex justify-between text-sm">
-          <span class="text-neutral-400">Statut</span>
+          <span class="text-cv-muted">Statut</span>
           <% if check[:status] == "ok" %>
             <span class="text-green-400">OK</span>
           <% else %>
@@ -22,7 +22,7 @@
           <% end %>
         </div>
         <div class="flex justify-between text-sm">
-          <span class="text-neutral-400">Message</span>
+          <span class="text-cv-muted">Message</span>
           <span class="text-neutral-300"><%= check[:message] %></span>
         </div>
       </div>
@@ -31,23 +31,23 @@
 </div>
 
 <div class="mt-8">
-  <div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+  <div class="bg-cv-surface rounded-xl p-6 border border-cv-border">
     <h3 class="text-sm font-semibold mb-4">Informations systeme</h3>
     <div class="grid grid-cols-2 gap-4 text-sm">
       <div class="flex justify-between">
-        <span class="text-neutral-400">Ruby</span>
+        <span class="text-cv-muted">Ruby</span>
         <span><%= RUBY_VERSION %></span>
       </div>
       <div class="flex justify-between">
-        <span class="text-neutral-400">Rails</span>
+        <span class="text-cv-muted">Rails</span>
         <span><%= Rails.version %></span>
       </div>
       <div class="flex justify-between">
-        <span class="text-neutral-400">Environnement</span>
+        <span class="text-cv-muted">Environnement</span>
         <span><%= Rails.env %></span>
       </div>
       <div class="flex justify-between">
-        <span class="text-neutral-400">Heure serveur</span>
+        <span class="text-cv-muted">Heure serveur</span>
         <span><%= Time.current.strftime("%Y-%m-%d %H:%M:%S %Z") %></span>
       </div>
     </div>

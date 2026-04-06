@@ -11,22 +11,22 @@
 
   <div>
     <label class="text-sm font-medium block mb-1">Abonnement</label>
-    <%= f.select :provider, CinemaPass.providers.keys.map { |p| [p.titleize.gsub("_", " "), p] }, { include_blank: "Choisir un abonnement" }, class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
+    <%= f.select :provider, CinemaPass.providers.keys.map { |p| [p.titleize.gsub("_", " "), p] }, { include_blank: "Choisir un abonnement" }, class: "w-full rounded-lg bg-neutral-50 dark:bg-cv-surface border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
   </div>
 
   <div id="custom_provider_field" class="<%= 'hidden' unless cinema_pass.other? %>">
     <label class="text-sm font-medium block mb-1">Nom personnalis&eacute;</label>
-    <%= f.text_field :provider_custom_name, placeholder: "Nom de votre abonnement", class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
+    <%= f.text_field :provider_custom_name, placeholder: "Nom de votre abonnement", class: "w-full rounded-lg bg-neutral-50 dark:bg-cv-surface border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
   </div>
 
   <div>
     <label class="text-sm font-medium block mb-1">Type de carte</label>
-    <%= f.select :pass_type, CinemaPass.pass_types.keys.map { |t| [t.capitalize, t] }, { include_blank: "Choisir un type" }, class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
+    <%= f.select :pass_type, CinemaPass.pass_types.keys.map { |t| [t.capitalize, t] }, { include_blank: "Choisir un type" }, class: "w-full rounded-lg bg-neutral-50 dark:bg-cv-surface border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
   </div>
 
   <div>
     <label class="text-sm font-medium block mb-1">Date d'expiration</label>
-    <%= f.date_field :expiration_date, class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
+    <%= f.date_field :expiration_date, class: "w-full rounded-lg bg-neutral-50 dark:bg-cv-surface border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500" %>
   </div>
 
   <div class="flex items-center justify-between">
@@ -34,7 +34,7 @@
       <p class="text-sm font-medium">Afficher sur le profil</p>
       <p class="text-xs text-neutral-400">Rendre cette carte visible sur votre profil public</p>
     </div>
-    <%= f.check_box :display_on_profile, class: "rounded border-neutral-300 dark:border-neutral-600 text-amber-500 focus:ring-amber-500" %>
+    <%= f.check_box :display_on_profile, class: "rounded border-neutral-300 dark:border-cv-border text-amber-500 focus:ring-amber-500" %>
   </div>
 
   <div class="flex items-center gap-3">

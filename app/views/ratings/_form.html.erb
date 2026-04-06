@@ -1,4 +1,4 @@
-<%= form_with(model: [movie, rating], class: "bg-white dark:bg-[#1A1A1A] rounded-lg p-4 shadow-sm") do |f| %>
+<%= form_with(model: [movie, rating], class: "bg-white dark:bg-cv-surface rounded-xl p-4 shadow-sm") do |f| %>
   <div class="space-y-4">
     <div data-controller="rating">
       <label class="text-sm font-medium block mb-2">Note</label>
@@ -19,11 +19,11 @@
     </div>
     <div>
       <label class="text-sm font-medium block mb-2"><%= t("ratings.write_review") %></label>
-      <%= f.text_area :review_text, rows: 3, class: "w-full rounded-lg bg-neutral-50 dark:bg-neutral-800 border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500", placeholder: "Partagez votre avis..." %>
+      <%= f.text_area :review_text, rows: 3, class: "w-full rounded-lg bg-neutral-50 dark:bg-cv-surface border-0 text-sm p-3 focus:ring-2 focus:ring-amber-500", placeholder: "Partagez votre avis..." %>
     </div>
     <div class="flex items-center gap-2">
-      <%= f.check_box :spoiler, class: "rounded border-neutral-300 dark:border-neutral-600 text-amber-500 focus:ring-amber-500" %>
-      <%= f.label :spoiler, t("ratings.contains_spoilers"), class: "text-sm text-neutral-600 dark:text-neutral-400" %>
+      <%= f.check_box :spoiler, class: "rounded border-neutral-300 dark:border-cv-border text-amber-500 focus:ring-amber-500" %>
+      <%= f.label :spoiler, t("ratings.contains_spoilers"), class: "text-sm text-neutral-600 dark:text-cv-muted" %>
     </div>
     <%= f.submit rating.persisted? ? "Modifier" : "Publier", class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition cursor-pointer" %>
   </div>

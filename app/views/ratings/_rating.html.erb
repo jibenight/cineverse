@@ -1,4 +1,4 @@
-<div class="bg-white dark:bg-[#1A1A1A] rounded-lg p-4 shadow-sm" id="rating_<%= rating.id %>">
+<div class="bg-white dark:bg-cv-surface rounded-xl p-4 shadow-sm" id="rating_<%= rating.id %>">
   <div class="flex items-start gap-3">
     <%= render UserAvatarComponent.new(user: rating.user, size: :sm) %>
     <div class="flex-1">
@@ -10,7 +10,7 @@
         <% if rating.spoiler? %>
           <%= render SpoilerComponent.new(content: rating.review_text) %>
         <% else %>
-          <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400"><%= rating.review_text %></p>
+          <p class="mt-2 text-sm text-neutral-600 dark:text-cv-muted"><%= rating.review_text %></p>
         <% end %>
       <% end %>
       <div class="flex items-center gap-4 mt-2" id="rating_<%= rating.id %>_likes">

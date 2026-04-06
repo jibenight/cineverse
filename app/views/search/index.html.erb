@@ -4,7 +4,7 @@
   <%= form_with url: search_path, method: :get, class: "mb-8" do %>
     <div class="flex gap-2">
       <input type="text" name="q" value="<%= @query %>" placeholder="Rechercher un film..." autofocus
-             class="flex-1 px-4 py-3 rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-sm focus:ring-2 focus:ring-amber-500">
+             class="flex-1 px-4 py-3 rounded-xl bg-white dark:bg-cv-surface border border-neutral-200 dark:border-cv-border text-sm focus:ring-2 focus:ring-amber-500">
       <button type="submit" class="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition">Rechercher</button>
     </div>
   <% end %>
@@ -21,8 +21,8 @@
       <p class="text-sm text-neutral-400 mb-4"><%= @tmdb_results[:total_results] %> résultats trouvés sur TMDb</p>
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
         <% @tmdb_results[:results].each do |result| %>
-          <%= button_to import_tmdb_movie_path(tmdb_id: result[:tmdb_id]), method: :post, class: "bg-white dark:bg-[#1A1A1A] rounded-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden text-left hover:ring-2 hover:ring-amber-500 transition cursor-pointer w-full" do %>
-            <div class="aspect-[2/3] bg-neutral-800">
+          <%= button_to import_tmdb_movie_path(tmdb_id: result[:tmdb_id]), method: :post, class: "bg-white dark:bg-cv-surface rounded-xl border border-neutral-200 dark:border-cv-border overflow-hidden text-left hover:ring-2 hover:ring-amber-500 transition cursor-pointer w-full" do %>
+            <div class="aspect-[2/3] bg-cv-hover dark:bg-cv-hover">
               <% if result[:poster_path] %>
                 <img src="https://image.tmdb.org/t/p/w342<%= result[:poster_path] %>" alt="<%= result[:title] %>" class="w-full h-full object-cover" loading="lazy">
               <% end %>

@@ -2,66 +2,66 @@
 <% content_for(:page_title) { "Abonne : #{@subscriber.email}" } %>
 
 <div class="mb-6">
-  <%= link_to "← Retour aux abonnes", admin_newsletter_subscribers_path, class: "text-sm text-neutral-400 hover:text-amber-500" %>
+  <%= link_to "← Retour aux abonnes", admin_newsletter_subscribers_path, class: "text-sm text-cv-muted hover:text-amber-500" %>
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
   <!-- Subscriber Info -->
   <div class="lg:col-span-1">
-    <div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+    <div class="bg-cv-surface rounded-xl p-6 border border-cv-border">
       <div class="text-center mb-6">
         <div class="w-16 h-16 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-500 text-xl font-bold mx-auto">
           <%= @subscriber.email[0].upcase %>
         </div>
         <h2 class="text-lg font-bold mt-3"><%= @subscriber.email %></h2>
         <% if @subscriber.first_name.present? %>
-          <p class="text-sm text-neutral-400"><%= @subscriber.first_name %></p>
+          <p class="text-sm text-cv-muted"><%= @subscriber.first_name %></p>
         <% end %>
       </div>
 
       <div class="space-y-3 text-sm">
         <div class="flex justify-between">
-          <span class="text-neutral-400">Statut</span>
+          <span class="text-cv-muted">Statut</span>
           <% case @subscriber.status %>
           <% when "active" %>
             <span class="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-xs font-medium">Actif</span>
           <% when "pending" %>
             <span class="px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400 text-xs font-medium">En attente</span>
           <% when "unsubscribed" %>
-            <span class="px-2 py-0.5 rounded-full bg-neutral-500/20 text-neutral-400 text-xs font-medium">Desinscrit</span>
+            <span class="px-2 py-0.5 rounded-full bg-neutral-500/20 text-cv-muted text-xs font-medium">Desinscrit</span>
           <% when "bounced" %>
             <span class="px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 text-xs font-medium">Bounce</span>
           <% end %>
         </div>
         <div class="flex justify-between">
-          <span class="text-neutral-400">Source</span>
+          <span class="text-cv-muted">Source</span>
           <span><%= @subscriber.source %></span>
         </div>
         <div class="flex justify-between">
-          <span class="text-neutral-400">Inscription</span>
+          <span class="text-cv-muted">Inscription</span>
           <span><%= l(@subscriber.created_at, format: :short) %></span>
         </div>
         <% if @subscriber.confirmed_at.present? %>
           <div class="flex justify-between">
-            <span class="text-neutral-400">Confirme le</span>
+            <span class="text-cv-muted">Confirme le</span>
             <span><%= l(@subscriber.confirmed_at, format: :short) %></span>
           </div>
         <% end %>
         <% if @subscriber.unsubscribed_at.present? %>
           <div class="flex justify-between">
-            <span class="text-neutral-400">Desinscrit le</span>
+            <span class="text-cv-muted">Desinscrit le</span>
             <span><%= l(@subscriber.unsubscribed_at, format: :short) %></span>
           </div>
         <% end %>
         <% if @subscriber.user.present? %>
           <div class="flex justify-between">
-            <span class="text-neutral-400">Compte lie</span>
+            <span class="text-cv-muted">Compte lie</span>
             <%= link_to @subscriber.user.username, admin_user_path(@subscriber.user), class: "text-amber-500 hover:text-amber-400" %>
           </div>
         <% end %>
       </div>
 
-      <hr class="my-4 border-neutral-700">
+      <hr class="my-4 border-cv-border">
 
       <!-- Actions -->
       <div class="space-y-2">
@@ -78,7 +78,7 @@
 
   <!-- Preferences -->
   <div class="lg:col-span-2">
-    <div class="bg-[#1A1A1A] rounded-lg p-5 border border-neutral-800">
+    <div class="bg-cv-surface rounded-xl p-5 border border-cv-border">
       <h3 class="text-sm font-semibold mb-4">Preferences</h3>
       <% if @subscriber.newsletter_preferences.any? %>
         <div class="space-y-3">
@@ -88,13 +88,13 @@
               <% if pref.enabled? %>
                 <span class="px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 text-xs">Active</span>
               <% else %>
-                <span class="px-2 py-0.5 rounded-full bg-neutral-500/20 text-neutral-400 text-xs">Desactive</span>
+                <span class="px-2 py-0.5 rounded-full bg-neutral-500/20 text-cv-muted text-xs">Desactive</span>
               <% end %>
             </div>
           <% end %>
         </div>
       <% else %>
-        <p class="text-sm text-neutral-500">Aucune preference configuree.</p>
+        <p class="text-sm text-cv-muted">Aucune preference configuree.</p>
       <% end %>
     </div>
   </div>

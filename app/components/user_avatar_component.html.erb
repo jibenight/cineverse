@@ -1,7 +1,7 @@
 <div class="relative inline-block">
   <img src="<%= avatar_url %>" alt="<%= @user.username %>" class="<%= size_class %> rounded-full object-cover">
   <% if @show_online && @user.online? %>
-    <span class="absolute bottom-0 right-0 <%= online_indicator_class %> bg-green-500 border-2 border-white dark:border-neutral-900 rounded-full"></span>
+    <span class="absolute bottom-0 right-0 <%= online_indicator_class %> bg-green-500 border-2 border-white dark:border-cv-bg rounded-full"></span>
   <% end %>
   <% if @show_pass %>
     <% @user.cinema_passes.visible.each do |pass| %>

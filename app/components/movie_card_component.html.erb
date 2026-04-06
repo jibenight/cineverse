@@ -1,14 +1,14 @@
-<div class="group relative rounded-lg overflow-hidden bg-white dark:bg-neutral-900 shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.03]">
+<div class="group relative rounded-xl overflow-hidden bg-white dark:bg-cv-surface shadow-sm hover:shadow-md transition-all duration-200 hover:scale-[1.03]">
   <a href="<%= movie_path(@movie) %>" class="block">
     <div class="aspect-[2/3] overflow-hidden">
       <img src="<%= poster_url %>" alt="<%= @movie.title %>" class="w-full h-full object-cover" loading="lazy">
     </div>
     <div class="p-3">
-      <h3 class="font-semibold text-sm text-neutral-900 dark:text-neutral-100 truncate"><%= @movie.title %></h3>
+      <h3 class="font-semibold text-sm text-neutral-900 dark:text-cv-text truncate"><%= @movie.title %></h3>
       <div class="flex items-center justify-between mt-1">
-        <span class="text-xs text-neutral-500 dark:text-neutral-400"><%= year %></span>
+        <span class="text-xs text-neutral-500 dark:text-cv-muted"><%= year %></span>
         <% if primary_genre %>
-          <span class="text-xs text-neutral-500 dark:text-neutral-400"><%= primary_genre %></span>
+          <span class="text-xs text-neutral-500 dark:text-cv-muted"><%= primary_genre %></span>
         <% end %>
       </div>
       <% if @show_rating && @movie.vote_average&.positive? %>

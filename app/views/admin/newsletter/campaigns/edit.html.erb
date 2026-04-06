@@ -2,9 +2,9 @@
 <% content_for(:page_title) { "Modifier : #{@campaign.subject}" } %>
 
 <div class="mb-6">
-  <%= link_to "← Retour a la campagne", admin_newsletter_campaign_path(@campaign), class: "text-sm text-neutral-400 hover:text-amber-500" %>
+  <%= link_to "← Retour a la campagne", admin_newsletter_campaign_path(@campaign), class: "text-sm text-cv-muted hover:text-amber-500" %>
 </div>
 
-<div class="bg-[#1A1A1A] rounded-lg p-6 border border-neutral-800">
+<div class="bg-cv-surface rounded-xl p-6 border border-cv-border">
   <%= render "form", campaign: @campaign %>
 </div>

@@ -1,30 +1,30 @@
 <% content_for(:title) { @user.username } %>
 <div class="max-w-5xl mx-auto px-6 py-8">
   <!-- Profile Header -->
-  <div class="bg-white dark:bg-[#1A1A1A] rounded-lg p-6 shadow-sm">
+  <div class="bg-white dark:bg-cv-surface rounded-xl p-6 shadow-sm">
     <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
       <%= render UserAvatarComponent.new(user: @user, size: :lg) %>
       <div class="flex-1 text-center sm:text-left">
         <h1 class="text-2xl font-bold"><%= @user.username %></h1>
         <% if @user.bio.present? %>
-          <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-2"><%= @user.bio %></p>
+          <p class="text-sm text-neutral-600 dark:text-cv-muted mt-2"><%= @user.bio %></p>
         <% end %>
         <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 mt-3 text-sm text-neutral-500">
-          <span><strong class="text-neutral-900 dark:text-neutral-100"><%= @user.ratings_count || 0 %></strong> critiques</span>
-          <span><strong class="text-neutral-900 dark:text-neutral-100"><%= @user.followers_count || 0 %></strong> abonnes</span>
-          <span><strong class="text-neutral-900 dark:text-neutral-100"><%= @user.following_count || 0 %></strong> abonnements</span>
+          <span><strong class="text-neutral-900 dark:text-cv-text"><%= @user.ratings_count || 0 %></strong> critiques</span>
+          <span><strong class="text-neutral-900 dark:text-cv-text"><%= @user.followers_count || 0 %></strong> abonnes</span>
+          <span><strong class="text-neutral-900 dark:text-cv-text"><%= @user.following_count || 0 %></strong> abonnements</span>
           <span>Membre depuis <%= l(@user.created_at, format: :short) %></span>
         </div>
         <% if user_signed_in? && @user != current_user %>
           <div class="mt-4 flex gap-2 justify-center sm:justify-start">
             <div id="follow_button_<%= @user.id %>">
               <% if current_user.following?(@user) %>
-                <%= button_to "Se desabonner", unfollow_user_path(@user.username), method: :delete, class: "px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition" %>
+                <%= button_to "Se desabonner", unfollow_user_path(@user.username), method: :delete, class: "px-4 py-2 rounded-lg border border-neutral-300 dark:border-cv-border text-sm hover:bg-neutral-100 dark:hover:bg-cv-hover transition" %>
               <% else %>
                 <%= button_to "Suivre", follow_user_path(@user.username), method: :post, class: "px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium transition" %>
               <% end %>
             </div>
-            <%= link_to "Message", new_conversation_path(recipient: @user.username), class: "px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition" %>
+            <%= link_to "Message", new_conversation_path(recipient: @user.username), class: "px-4 py-2 rounded-lg border border-neutral-300 dark:border-cv-border text-sm hover:bg-neutral-100 dark:hover:bg-cv-hover transition" %>
           </div>
         <% end %>
       </div>

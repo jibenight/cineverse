@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source "../../views";
 @source "../../components";
 @source "../../helpers";
@@ -7,9 +9,22 @@
 
 @theme {
   /* Fonts */
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-  --font-display: 'Bebas Neue', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+
+  /* Dark theme palette */
+  --color-cv-bg: #0e1518;
+  --color-cv-surface: #1a2228;
+  --color-cv-sidebar: #121a1f;
+  --color-cv-border: #2a3540;
+  --color-cv-hover: #243038;
+  --color-cv-text: #f9f8ff;
+  --color-cv-muted: #959ca3;
+
+  /* Light theme palette */
+  --color-cv-light-bg: #f4f5f7;
+  --color-cv-light-surface: #f8f9fb;
 }
 
 /* Custom animations */
@@ -82,7 +97,7 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #525252;
+  background: #3a4550;
   border-radius: 3px;
 }
 
