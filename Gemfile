@@ -39,7 +39,7 @@ gem "sentry-ruby", "~> 5.17"
 gem "sentry-rails", "~> 5.17"
 
 # UI Components
-gem "view_component", "~> 3.12"
+gem "view_component", "~> 4.4"
 gem "chartkick", "~> 5.0"
 gem "groupdate", "~> 6.4"
 
