@@ -28,7 +28,7 @@ gem "sidekiq", "~> 7.2"
 gem "sidekiq-cron", "~> 1.12"
 
 # Pagination
-gem "pagy", "~> 9.0"
+gem "pagy", "~> 43.2"
 
 # Security
 gem "rack-attack", "~> 6.7"
